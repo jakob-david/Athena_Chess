@@ -1,0 +1,170 @@
+package AI;
+
+import Game.Game;
+import Game.Piece;
+
+import java.util.List;
+
+public class AI {
+
+    private Game current_board;
+
+    private int moves_ahead = 1;
+
+    public AI(Piece[][] board, boolean is_white, int moves_ahead){
+
+        this.current_board = new Game(board, is_white);
+        this.moves_ahead = moves_ahead;
+    }
+
+
+
+    public int[] getMove(){
+
+        int[] best_move = new int[4];
+        best_move[0] = -1; best_move[1] = -1; best_move[2] = -1; best_move[3] = -1;
+
+        int best_move_value = Integer.MIN_VALUE;
+
+        for(int i=0; i < this.current_board.getLengthX(); i++){
+            for(int j=0; j < this.current_board.getLengthY(); j++){
+
+                if  (   null == this.current_board.getGameBoardReference()[i][j] ||
+                        (this.current_board.getGameBoardReference()[i][j].isWhite != this.current_board.isWhite())
+                    ){
+                    continue;
+                }
+
+                List<Integer> possible_moves = current_board.getPossibleMoves(i, j, true);
+
+
+                for(int element : possible_moves){
+
+                    int[] coordinates = current_board.get2DCoordinates(element);
+                    int new_i = coordinates[0];
+                    int new_j = coordinates[1];
+
+                    // Declare values and initialise them with the current values.
+                    int move_value_p1 = getMoveValue(this.current_board.isWhite());
+                    int move_value_p2 = getMoveValue(!this.current_board.isWhite());
+                    int piece_value = getPieceValue(!this.current_board.isWhite());
+
+
+                    Piece from_position = this.current_board.getCopyOfPiece(i, j);
+                    Piece to_position = this.current_board.getCopyOfPiece(new_i, new_j);
+
+                    current_board.movePieceOnBoard(i, j, new_i, new_j, false);
+
+                    // Take the difference between the old values and the current values.
+                    move_value_p1 = getMoveValue(this.current_board.isWhite()) - move_value_p1;
+                    move_value_p2 = getMoveValue(!this.current_board.isWhite()) - move_value_p2;
+                    piece_value = (getPieceValue(!this.current_board.isWhite()) - piece_value) * -1;
+
+
+                    int recursion_value = recursionStep(moves_ahead);
+
+                    this.current_board.putPieceCopyOnBoard(i, j, from_position);
+                    this.current_board.putPieceCopyOnBoard(new_i, new_j, to_position);
+
+                    int total_value = move_value_p1 - move_value_p2 + 5 * piece_value;
+
+                    if(total_value > best_move_value){
+                        best_move_value = total_value;
+                        best_move[0] = i; best_move[1] = j; best_move[2] = new_i; best_move[3] = new_j;
+                    }
+
+                }
+            }
+        }
+
+        return best_move;
+    }
+
+
+    private int recursionStep(int depth){
+
+        if (depth < 1){
+            return 0;
+        }
+
+
+
+
+        AI opponent = new AI(current_board.getGameBoardReference(), current_board.isWhite(), 0);
+        int[] opponent_move = opponent.getMove();
+
+        Piece opp_from_position = this.current_board.getCopyOfPiece(opponent_move[0], opponent_move[1]);
+        Piece opp_to_position = this.current_board.getCopyOfPiece(opponent_move[2], opponent_move[3]);
+        current_board.movePieceOnBoard(opponent_move[0], opponent_move[1], opponent_move[2], opponent_move[3], false);
+
+
+
+
+
+
+        int best_move_value = Integer.MIN_VALUE;
+
+
+        this.current_board.putPieceCopyOnBoard(opponent_move[0], opponent_move[1], opp_from_position);
+        this.current_board.putPieceCopyOnBoard(opponent_move[2], opponent_move[3], opp_to_position);
+
+        return 0;
+    }
+
+
+    //
+    // Large Helper Function
+    // -----------------------------
+
+
+    /*
+     * Returns the amount of possible moves for the current player.
+     * */
+    private int getMoveValue(boolean is_white){
+
+        int sum_of_possible_moves = 0;
+
+        for(int i=0; i < this.current_board.getLengthX(); i++) {
+            for (int j = 0; j < this.current_board.getLengthY(); j++) {
+
+                if(this.current_board.getGameBoardReference()[i][j] != null && this.current_board.getGameBoardReference()[i][j].isWhite == is_white){
+                    List<Integer> tmp_possible_moves = current_board.getPossibleMoves(i, j, true);
+                    sum_of_possible_moves += tmp_possible_moves.size();
+                }
+            }
+        }
+
+        return sum_of_possible_moves;
+    }
+
+    /*
+     * Returns the sum of the values of all the pieces of the player specified.
+     * */
+    private int getPieceValue(boolean is_white){
+
+        int sum = 0;
+
+        for(int i=0; i < current_board.getLengthX(); i++){
+            for(int j=0; j < current_board.getLengthY(); j++){
+
+                Piece tmp_piece = current_board.getReferenceOfPiece(i, j);
+
+                if( null == tmp_piece || tmp_piece.isWhite != is_white){
+                    continue;
+                }
+
+                sum += tmp_piece.value;
+            }
+        }
+
+        return sum;
+    }
+
+
+    //
+    // Small Helper Function
+    // -----------------------------
+
+
+
+}
