@@ -30,41 +30,6 @@ public class Bishop extends Piece {
     }
 
 
-    /*
-    * Examines one be possible diagonal.
-    * */
-    private List<Integer> examineDiagonal(int i, int j, int dir_i, int dir_j, boolean[][] locations, boolean[][] own_locations){
-
-        List<Integer> ret = new ArrayList<>();
-
-        int tmp_i = i;
-        int tmp_j = j;
-
-        while (true) {
-
-            tmp_i += dir_i;
-            tmp_j += dir_j;
-
-            if (checkIfOnBoard(tmp_i, tmp_j)) {
-
-                if (own_locations[tmp_i][tmp_j]) {
-                    break;
-                }
-
-                ret.add(getListValue(tmp_i, tmp_j));
-
-                if (locations[tmp_i][tmp_j]) {
-                    break;
-                }
-
-            } else {
-                break;
-            }
-        }
-
-        return ret;
-    }
-
 
     /*
      * Makes a copy of the Bishop.

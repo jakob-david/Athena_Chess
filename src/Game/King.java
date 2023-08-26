@@ -39,10 +39,6 @@ public class King extends Piece {
         return ret;
     }
 
-    /*
-     * Checks one field for the king.
-     * */
-
 
     /*
      * Returns a copy of the king.
