@@ -17,56 +17,38 @@ public class King extends Piece {
 
     }
 
+    /*
+     * Returns all possible moves for the king.
+     * */
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
-        List<Integer> ret = new ArrayList<Integer>();
+        List<Integer> ret = new ArrayList<>();
 
-        int tmp_i;
-        int tmp_j;
+        ret.addAll(checkOneTile(i, j, 1, 1, locations, own_locations));
+        ret.addAll(checkOneTile(i, j, 1, 0, locations, own_locations));
+        ret.addAll(checkOneTile(i, j, 1, -1, locations, own_locations));
 
-        // upper layer
-        tmp_i = i - 1;
-        tmp_j = j - 1;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !own_locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
-        }
-        tmp_i = i - 1;
-        tmp_j = j;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !own_locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
-        }
-        tmp_i = i - 1;
-        tmp_j = j + 1;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !own_locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
-        }
+        ret.addAll(checkOneTile(i, j, 0, 1, locations, own_locations));
+        ret.addAll(checkOneTile(i, j, 0, -1, locations, own_locations));
 
-        // middle layer
-        tmp_i = i;
-        tmp_j = j - 1;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !own_locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
-        }
-        tmp_i = i;
-        tmp_j = j + 1;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !own_locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
-        }
+        ret.addAll(checkOneTile(i, j, -1, 1, locations, own_locations));
+        ret.addAll(checkOneTile(i, j, -1, 0, locations, own_locations));
+        ret.addAll(checkOneTile(i, j, -1, -1, locations, own_locations));
 
-        // lower layer
-        tmp_i = i + 1;
-        tmp_j = j - 1;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !own_locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
-        }
-        tmp_i = i + 1;
-        tmp_j = j;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !own_locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
-        }
-        tmp_i = i + 1;
-        tmp_j = j + 1;
+        return ret;
+    }
+
+    /*
+     * Checks one field for the king.
+     * */
+    private List<Integer> checkOneTile(int i, int j, int dir_i, int dir_j, boolean[][] locations, boolean[][] own_locations){
+
+        List<Integer> ret = new ArrayList<>();
+
+        int tmp_i = i + dir_i;
+        int tmp_j = j + dir_j;
+
         if(checkIfOnBoard(tmp_i, tmp_j) && !own_locations[tmp_i][tmp_j]){
             ret.add(getListValue(tmp_i, tmp_j));
         }
@@ -74,6 +56,10 @@ public class King extends Piece {
         return ret;
     }
 
+
+    /*
+     * Returns a copy of the king.
+     * */
     @Override
     public Piece Copy() {
         return new King(this.isWhite);
