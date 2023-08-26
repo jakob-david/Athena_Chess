@@ -25,16 +25,16 @@ public class King extends Piece {
 
         List<Integer> ret = new ArrayList<>();
 
-        ret.addAll(checkOneTile(i, j, 1, 1, locations, own_locations));
-        ret.addAll(checkOneTile(i, j, 1, 0, locations, own_locations));
-        ret.addAll(checkOneTile(i, j, 1, -1, locations, own_locations));
+        ret.addAll(checkOneTile(i, j, 1, 1, own_locations));
+        ret.addAll(checkOneTile(i, j, 1, 0, own_locations));
+        ret.addAll(checkOneTile(i, j, 1, -1, own_locations));
 
-        ret.addAll(checkOneTile(i, j, 0, 1, locations, own_locations));
-        ret.addAll(checkOneTile(i, j, 0, -1, locations, own_locations));
+        ret.addAll(checkOneTile(i, j, 0, 1, own_locations));
+        ret.addAll(checkOneTile(i, j, 0, -1, own_locations));
 
-        ret.addAll(checkOneTile(i, j, -1, 1, locations, own_locations));
-        ret.addAll(checkOneTile(i, j, -1, 0, locations, own_locations));
-        ret.addAll(checkOneTile(i, j, -1, -1, locations, own_locations));
+        ret.addAll(checkOneTile(i, j, -1, 1, own_locations));
+        ret.addAll(checkOneTile(i, j, -1, 0, own_locations));
+        ret.addAll(checkOneTile(i, j, -1, -1, own_locations));
 
         return ret;
     }
@@ -42,7 +42,7 @@ public class King extends Piece {
     /*
      * Checks one field for the king.
      * */
-    private List<Integer> checkOneTile(int i, int j, int dir_i, int dir_j, boolean[][] locations, boolean[][] own_locations){
+    private List<Integer> checkOneTile(int i, int j, int dir_i, int dir_j, boolean[][] own_locations){
 
         List<Integer> ret = new ArrayList<>();
 
