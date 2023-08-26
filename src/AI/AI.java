@@ -19,7 +19,7 @@ public class AI {
 
 
 
-    public int[] getMove(){
+    public int[] getMove(boolean reduced){
 
         int[] best_move = new int[4];
         best_move[0] = -1; best_move[1] = -1; best_move[2] = -1; best_move[3] = -1;
@@ -44,11 +44,16 @@ public class AI {
                     int new_i = coordinates[0];
                     int new_j = coordinates[1];
 
-                    // Declare values and initialise them with the current values.
-                    int move_value_p1 = getMoveValue(this.current_board.isWhite());
-                    int move_value_p2 = getMoveValue(!this.current_board.isWhite());
+                    // Declare values and initialise
+                    int move_value_p1 = 0;
+                    int move_value_p2 = 0;
                     int piece_value = getPieceValue(!this.current_board.isWhite());
 
+                    // Activate move value if needed.
+                    if(!reduced){
+                        move_value_p1 = getMoveValue(this.current_board.isWhite());
+                        move_value_p2 = getMoveValue(!this.current_board.isWhite());
+                    }
 
                     Piece from_position = this.current_board.getCopyOfPiece(i, j);
                     Piece to_position = this.current_board.getCopyOfPiece(new_i, new_j);
@@ -56,19 +61,33 @@ public class AI {
                     current_board.movePieceOnBoard(i, j, new_i, new_j, false);
 
                     // Take the difference between the old values and the current values.
-                    move_value_p1 = getMoveValue(this.current_board.isWhite()) - move_value_p1;
-                    move_value_p2 = getMoveValue(!this.current_board.isWhite()) - move_value_p2;
                     piece_value = (getPieceValue(!this.current_board.isWhite()) - piece_value) * -1;
 
+                    // Activate move value if needed.
+                    if(!reduced){
+                        move_value_p1 = getMoveValue(this.current_board.isWhite()) - move_value_p1;
+                        move_value_p2 = getMoveValue(!this.current_board.isWhite()) - move_value_p2;
+                    }
 
                     int recursion_value = recursionStep(moves_ahead);
 
                     this.current_board.putPieceCopyOnBoard(i, j, from_position);
                     this.current_board.putPieceCopyOnBoard(new_i, new_j, to_position);
 
-                    int total_value = move_value_p1 - move_value_p2 + 5 * piece_value;
+                    int total_value = move_value_p1 - move_value_p2 + 100 * piece_value + recursion_value;
+
+                    if(!reduced && total_value > 8000) {
+                        System.out.println("------------------------");
+                        System.out.println("total: " + total_value);
+                        System.out.println(("best: " + best_move_value));
+                        System.out.println(("recursion: " + recursion_value));
+                    }
 
                     if(total_value > best_move_value){
+
+                        if(!reduced && total_value > 8000) {
+                            System.out.println(("HI "));
+                        }
                         best_move_value = total_value;
                         best_move[0] = i; best_move[1] = j; best_move[2] = new_i; best_move[3] = new_j;
                     }
@@ -77,38 +96,109 @@ public class AI {
             }
         }
 
+
+        if(!reduced && false){
+            System.out.println(best_move_value);
+        }
         return best_move;
     }
 
 
     private int recursionStep(int depth){
 
+        boolean tmp = false;
+
+        // End condition
+        //------------------
         if (depth < 1){
             return 0;
         }
+        //------------------
 
+        if(current_board.getGameBoardReference()[3][6] != null && current_board.getGameBoardReference()[3][6].name == 'Q'){
+            System.out.println("=================");
+            current_board.printMatrix();
+            tmp = true;
+        }
 
+        // Declare and initialise piece and return values.
+        //------------------
+        int self_piece_value = getPieceValue(current_board.isWhite());
+        int opponent_piece_value = getPieceValue(!current_board.isWhite());
+        int return_value = 0;
+        //------------------
 
+        // Opponent move
+        //------------------
+        AI opponent = new AI(current_board.getGameBoardReference(), !current_board.isWhite(), 0);
+        int[] opponent_move = opponent.getMove(false);
 
-        AI opponent = new AI(current_board.getGameBoardReference(), current_board.isWhite(), 0);
-        int[] opponent_move = opponent.getMove();
+        //System.out.println("->   " + opponent_move[0] + "-" + opponent_move[1]);
+        //current_board.printMatrix();
 
         Piece opp_from_position = this.current_board.getCopyOfPiece(opponent_move[0], opponent_move[1]);
         Piece opp_to_position = this.current_board.getCopyOfPiece(opponent_move[2], opponent_move[3]);
         current_board.movePieceOnBoard(opponent_move[0], opponent_move[1], opponent_move[2], opponent_move[3], false);
+        //------------------
 
 
+        if(tmp){
+            System.out.println("alpha");
+            System.out.println(return_value);
+            current_board.printMatrix();
+
+        }
+
+        // "My" next move
+        //------------------
+        AI self = new AI(current_board.getGameBoardReference(), current_board.isWhite(), 0);
+        int[] self_move = opponent.getMove(false);
+
+        Piece self_from_position = this.current_board.getCopyOfPiece(self_move[0], self_move[1]);
+        Piece self_to_position = this.current_board.getCopyOfPiece(self_move[2], self_move[3]);
+        current_board.movePieceOnBoard(self_move[0], self_move[1], self_move[2], self_move[3], false);
+        //------------------
+
+        // Recursion.
+        //------------------
+        int recursion = recursionStep(depth-1);
+        //------------------
+
+        // Calculate return Value.
+        //------------------
+        self_piece_value = getPieceValue(current_board.isWhite()) - self_piece_value;
+        opponent_piece_value = getPieceValue(current_board.isWhite()) - opponent_piece_value;
+        return_value = 100*(self_piece_value - opponent_piece_value) + recursion/2;
+        //------------------
+
+        if(tmp){
+            System.out.println("beta");
+            System.out.println(return_value);
+            current_board.printMatrix();
+            tmp = false;
+
+        }
+
+        /*if(opponent_move[0] == 3 && opponent_move[1] == 6){
+            System.out.println("-------------");
+            current_board.printMatrix();
+            System.out.println(return_value);
+        }*/
+        // Self move redone
+        //------------------
+        this.current_board.putPieceCopyOnBoard(self_move[0], self_move[1], self_from_position);
+        this.current_board.putPieceCopyOnBoard(self_move[2], self_move[3], self_to_position);
+        //------------------
 
 
-
-
-        int best_move_value = Integer.MIN_VALUE;
-
-
+        // Opponent move redone
+        //------------------
         this.current_board.putPieceCopyOnBoard(opponent_move[0], opponent_move[1], opp_from_position);
         this.current_board.putPieceCopyOnBoard(opponent_move[2], opponent_move[3], opp_to_position);
+        //------------------
 
-        return 0;
+        //System.out.println("return_valueeeeee:" + return_value + self_piece_value + opponent_piece_value);
+        return return_value;
     }
 
 

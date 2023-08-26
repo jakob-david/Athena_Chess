@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        //Brett obj = new Brett();
+        //Brett obj = new Brett();q
         //obj.setVisible(true);
 
         // Set the Nimbus Look and Feel

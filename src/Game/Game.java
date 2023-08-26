@@ -250,7 +250,12 @@ public class Game {
      * */
     public void movePieceOnBoard(int old_i, int old_j, int new_i, int new_j, boolean human_move){
 
-        Piece tmp_piece = GameBoard[old_i][old_j].Copy();
+        Piece tmp_piece;
+        if(null != GameBoard[old_i][old_j]){
+            tmp_piece = GameBoard[old_i][old_j].Copy();
+        } else {
+            tmp_piece = null;
+        }
         GameBoard[old_i][old_j] = null;
         GameBoard[new_i][new_j] = tmp_piece;
 
@@ -379,7 +384,7 @@ public class Game {
     /*
      * Prints the Game Board to the console.
      * */
-    private void printMatrix(){
+    public void printMatrix(){
 
         System.out.println("--------------");
         for (int i = 0; i < GameBoard.length; i++) {
