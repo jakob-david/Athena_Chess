@@ -86,17 +86,12 @@ public class AI {
             }
         }
 
-
-        if(!reduced && false){
-            System.out.println(best_move_value);
-        }
         return best_move;
     }
 
 
     private int recursionStep(int depth){
 
-        boolean tmp = false;
 
         // End condition
         //------------------
@@ -105,17 +100,12 @@ public class AI {
         }
         //------------------
 
-        if(current_board.getGameBoardReference()[3][6] != null && current_board.getGameBoardReference()[3][6].name == 'Q'){
-            System.out.println("=================");
-            current_board.printMatrix();
-            tmp = true;
-        }
 
         // Declare and initialise piece and return values.
         //------------------
         int self_piece_value = getPieceValue(current_board.isWhite());
         int opponent_piece_value = getPieceValue(!current_board.isWhite());
-        int return_value = 0;
+        int return_value;
         //------------------
 
         // Opponent move
@@ -130,17 +120,10 @@ public class AI {
         //------------------
 
 
-        if(tmp){
-            System.out.println("alpha");
-            System.out.println(return_value);
-            current_board.printMatrix();
-
-        }
-
         // "My" next move
         //------------------
         AI self = new AI(current_board.getGameBoardReference(), current_board.isWhite(), 0);
-        int[] self_move = opponent.getMove(true);
+        int[] self_move = self.getMove(true);
 
         Piece self_from_position = this.current_board.getCopyOfPiece(self_move[0], self_move[1]);
         Piece self_to_position = this.current_board.getCopyOfPiece(self_move[2], self_move[3]);
@@ -173,7 +156,6 @@ public class AI {
         this.current_board.putPieceCopyOnBoard(opponent_move[2], opponent_move[3], opp_to_position);
         //------------------
 
-        //System.out.println("return_valueeeeee:" + return_value + self_piece_value + opponent_piece_value);
         return return_value;
     }
 

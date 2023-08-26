@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Game {
 
-    private Piece GameBoard[][];
+    final private Piece[][] GameBoard;
 
     private boolean is_it_whites_turn = true;
 
@@ -32,12 +32,9 @@ public class Game {
         // Make a real copy.
         GameBoard = new Piece[board.length][board[0].length];
         for(int i=0; i < GameBoard.length; i++){
-            for(int j=0; j < GameBoard[0].length; j++){
-                GameBoard[i][j] = board[i][j];
-            }
+            System.arraycopy(board[i], 0, GameBoard[i], 0, GameBoard[0].length);
         }
     }
-
 
 
 
@@ -56,22 +53,14 @@ public class Game {
         // all locations
         for(int m=0; m<GameBoard.length; m++){
             for(int n=0; n<GameBoard.length; n++){
-                if(GameBoard[m][n] == null){
-                    locations[m][n] = false;
-                } else {
-                    locations[m][n] = true;
-                }
+                locations[m][n] = GameBoard[m][n] != null;
             }
         }
 
         // own locations
         for(int m=0; m<GameBoard.length; m++){
             for(int n=0; n<GameBoard.length; n++){
-                if(GameBoard[m][n] == null || GameBoard[m][n].isWhite != GameBoard[i][j].isWhite){
-                    own_locations[m][n] = false;
-                } else {
-                    own_locations[m][n] = true;
-                }
+                own_locations[m][n] = GameBoard[m][n] != null && GameBoard[m][n].isWhite == GameBoard[i][j].isWhite;
             }
         }
 
@@ -164,7 +153,7 @@ public class Game {
 
         int king_id = -1;
         // get King id
-        if(king_i < 0 || king_j < 0){
+        if(king_i < 0){
             System.err.println("Error: King not found");
         } else {
             king_id = get1DCoordinates(king_i, king_j);
@@ -361,11 +350,7 @@ public class Game {
      * */
     public boolean checkIfRightPlayer(int i, int j){
 
-        if(GameBoard[i][j].isWhite == this.is_it_whites_turn) {
-            return true;
-        } else {
-            return false;
-        }
+        return GameBoard[i][j].isWhite == this.is_it_whites_turn;
     }
 
 
@@ -387,13 +372,13 @@ public class Game {
     public void printMatrix(){
 
         System.out.println("--------------");
-        for (int i = 0; i < GameBoard.length; i++) {
-            for (int j = 0; j < GameBoard[i].length; j++) {
+        for (Piece[] pieces : GameBoard) {
+            for (Piece piece : pieces) {
 
-                if(null == GameBoard[i][j]){
+                if (null == piece) {
                     System.out.print(". ");
                 } else {
-                    System.out.print(GameBoard[i][j].name + " ");
+                    System.out.print(piece.name + " ");
                 }
             }
             System.out.println();
