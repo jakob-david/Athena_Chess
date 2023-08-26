@@ -4,6 +4,7 @@ import Game.Game;
 import Game.Piece;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class AI {
 
@@ -11,20 +12,25 @@ public class AI {
 
     final private int moves_ahead;
 
-    public AI(Piece[][] board, boolean is_white, int moves_ahead){
+    int best_moves_to_keep = 3;
+    int best_move_max_distance = 2;
+    boolean best_move_randomisation;
+
+
+    public AI(Piece[][] board, boolean is_white, int moves_ahead, boolean best_move_randomisation){
 
         this.current_board = new Game(board, is_white);
         this.moves_ahead = moves_ahead;
+        this.best_move_randomisation = best_move_randomisation;
     }
 
 
 
     public int[] getMove(boolean reduced){
 
-        int[] best_move = new int[4];
-        best_move[0] = -1; best_move[1] = -1; best_move[2] = -1; best_move[3] = -1;
 
-        int best_move_value = Integer.MIN_VALUE;
+        // Make a list to hold to best 3 moves. (At most 3 moves)
+        List<Move> best_moves = new ArrayList<>();
 
         for(int i=0; i < this.current_board.getLengthX(); i++){
             for(int j=0; j < this.current_board.getLengthY(); j++){
@@ -76,17 +82,23 @@ public class AI {
 
                     int total_value = move_value_p1 - move_value_p2 + 100 * piece_value + recursion_value;
 
-                    if(total_value > best_move_value){
+                    if(best_moves.isEmpty() || total_value > best_moves.get(0).move_value - best_move_max_distance){
+                        best_moves.add(new Move(total_value, i, j, new_i, new_j));
+                    }
 
-                        best_move_value = total_value;
-                        best_move[0] = i; best_move[1] = j; best_move[2] = new_i; best_move[3] = new_j;
+                    // TODO: Need to find better solution
+                    best_moves.sort(best_moves.get(0));
+
+                    if(best_moves_to_keep < best_moves.size()){
+                        best_moves.remove(best_moves.size()-1);
                     }
 
                 }
             }
         }
 
-        return best_move;
+        // TODO: Pick at random
+        return best_moves.get(0).move;
     }
 
 
@@ -109,7 +121,7 @@ public class AI {
 
         // Opponent move
         //------------------
-        AI opponent = new AI(current_board.getGameBoardReference(), !current_board.isWhite(), 0);
+        AI opponent = new AI(current_board.getGameBoardReference(), !current_board.isWhite(), 0, false);
         int[] opponent_move = opponent.getMove(true);
 
 
@@ -121,7 +133,7 @@ public class AI {
 
         // "My" next move
         //------------------
-        AI self = new AI(current_board.getGameBoardReference(), current_board.isWhite(), 0);
+        AI self = new AI(current_board.getGameBoardReference(), current_board.isWhite(), 0, false);
         int[] self_move = self.getMove(true);
 
         Piece self_from_position = this.current_board.getCopyOfPiece(self_move[0], self_move[1]);

@@ -193,7 +193,7 @@ public class Brett extends JFrame implements ActionListener{
 
             // AI stuff
             if(AI_activated){
-                AI ai_player = new AI(game.getGameBoardReference(), AI_is_white, AI_moves_ahead);
+                AI ai_player = new AI(game.getGameBoardReference(), AI_is_white, AI_moves_ahead, true);
                 int[] move = ai_player.getMove(false);
 
                 game.movePieceOnBoard(move[0], move[1], move[2], move[3], true);
