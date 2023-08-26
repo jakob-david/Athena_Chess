@@ -14,7 +14,7 @@ public class Knight extends Piece {
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
-        List<Integer> ret = new ArrayList<Integer>();
+        List<Integer> ret = new ArrayList<>();
 
         ret.addAll(checkOneTile(i, j, -2, -1, own_locations));
         ret.addAll(checkOneTile(i, j, -2, 1, own_locations));
