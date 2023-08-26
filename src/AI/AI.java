@@ -101,11 +101,10 @@ public class AI {
         //------------------
 
 
-        // Declare and initialise piece and return values.
+        // Declare and initialise piece.
         //------------------
         int self_piece_value = getPieceValue(current_board.isWhite());
         int opponent_piece_value = getPieceValue(!current_board.isWhite());
-        int return_value;
         //------------------
 
         // Opponent move
@@ -139,7 +138,7 @@ public class AI {
         //------------------
         self_piece_value = getPieceValue(current_board.isWhite()) - self_piece_value;
         opponent_piece_value = getPieceValue(!current_board.isWhite()) - opponent_piece_value;
-        return_value = 100*(self_piece_value - opponent_piece_value) + recursion/2;
+        int return_value = 100*(self_piece_value - opponent_piece_value) + recursion/2;
         //------------------
 
 
