@@ -17,7 +17,7 @@ public class Pawn extends Piece {
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
-        List<Integer> ret = new ArrayList<Integer>();
+        List<Integer> ret = new ArrayList<>();
 
         int direction;
         if(this.isWhite){
