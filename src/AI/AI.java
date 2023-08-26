@@ -7,9 +7,9 @@ import java.util.List;
 
 public class AI {
 
-    private Game current_board;
+    final private Game current_board;
 
-    private int moves_ahead = 1;
+    final private int moves_ahead;
 
     public AI(Piece[][] board, boolean is_white, int moves_ahead){
 

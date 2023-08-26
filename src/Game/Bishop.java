@@ -11,102 +11,39 @@ public class Bishop extends Piece {
         this.value = 3;
     }
 
+
+    /*
+     * Returns all possible moves for the bishop.
+     * */
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
-        List<Integer> ret = new ArrayList<Integer>();
+        List<Integer> ret = new ArrayList<>();
 
-        int tmp_i;
-        int tmp_j;
 
-        // left up
-        tmp_i = i;
-        tmp_j = j;
+        ret.addAll(examineDiagonal(i, j, 1, 1, locations, own_locations));
+        ret.addAll(examineDiagonal(i, j, 1, -1, locations, own_locations));
+        ret.addAll(examineDiagonal(i, j, -1, 1, locations, own_locations));
+        ret.addAll(examineDiagonal(i, j, -1, -1, locations, own_locations));
 
-        while (true) {
+        return ret;
+    }
 
-            tmp_i--;
-            tmp_j--;
 
-            if (checkIfOnBoard(tmp_i, tmp_j)) {
+    /*
+    * Examines one be possible diagonal.
+    * */
+    private List<Integer> examineDiagonal(int i, int j, int dir_i, int dir_j, boolean[][] locations, boolean[][] own_locations){
 
-                if (own_locations[tmp_i][tmp_j]) {
-                    break;
-                }
+        List<Integer> ret = new ArrayList<>();
 
-                ret.add(getListValue(tmp_i, tmp_j));
-
-                if (locations[tmp_i][tmp_j]) {
-                    break;
-                }
-
-            } else {
-                break;
-            }
-        }
-
-        // right up
-        tmp_i = i;
-        tmp_j = j;
+        int tmp_i = i;
+        int tmp_j = j;
 
         while (true) {
 
-            tmp_i--;
-            tmp_j++;
-
-            if (checkIfOnBoard(tmp_i, tmp_j)) {
-
-                if (own_locations[tmp_i][tmp_j]) {
-                    break;
-                }
-
-                ret.add(getListValue(tmp_i, tmp_j));
-
-                if (locations[tmp_i][tmp_j]) {
-                    break;
-                }
-
-            } else {
-                break;
-            }
-        }
-
-
-        // left down
-        tmp_i = i;
-        tmp_j = j;
-
-        while (true) {
-
-            tmp_i++;
-            tmp_j--;
-
-            if (checkIfOnBoard(tmp_i, tmp_j)) {
-
-                if (own_locations[tmp_i][tmp_j]) {
-                    break;
-                }
-
-                ret.add(getListValue(tmp_i, tmp_j));
-
-                if (locations[tmp_i][tmp_j]) {
-                    break;
-                }
-
-            } else {
-                break;
-            }
-        }
-
-
-        // right down
-        tmp_i = i;
-        tmp_j = j;
-
-        while (true) {
-
-            tmp_i++;
-            tmp_j++;
+            tmp_i += dir_i;
+            tmp_j += dir_j;
 
             if (checkIfOnBoard(tmp_i, tmp_j)) {
 
@@ -128,6 +65,10 @@ public class Bishop extends Piece {
         return ret;
     }
 
+
+    /*
+     * Makes a copy of the Bishop.
+     * */
     @Override
     public Piece Copy() {
         return new Bishop(this.isWhite);
