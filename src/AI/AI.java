@@ -5,6 +5,7 @@ import Game.Piece;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class AI {
 
@@ -97,8 +98,14 @@ public class AI {
             }
         }
 
-        // TODO: Pick at random
-        return best_moves.get(0).move;
+        int pick_move = 0;
+
+        if(best_move_randomisation){
+            // Info: best_moves.size() is the max but it is not included in the randomisation process.
+            pick_move = ThreadLocalRandom.current().nextInt(0, best_moves.size());
+        }
+
+        return best_moves.get(pick_move).move;
     }
 
 
