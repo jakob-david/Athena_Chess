@@ -12,34 +12,48 @@ import java.util.List;
 
 public class Brett extends JFrame implements ActionListener{
 
-    private Game game = new Game();
+    private final Game game = new Game();
 
+    private final Log log = new Log();
+
+
+    // GUI variables
+    // -------------------------------
     JButton[] grid;
     JPanel panel;
+    // -------------------------------
 
-    /*
-    The current state for one move and its helper variables.
-     */
+    // State variables.
+    // The current state for one move and its helper variables.
+    // -------------------------------
     private int state = 0;
     private String state_string;
     private int state_id;
     private List<Integer> state_possibleMoves;
+    // -------------------------------
 
-    private Log log = new Log();
+    // AI variables
+    // -------------------------------
+    private final boolean AI_activated = true;
+    private final boolean AI_is_white = false;
+    private final int AI_moves_ahead = 1;
+    // -------------------------------
 
 
-    // AI stuff
-    private boolean AI_activated = true;
-    private boolean AI_is_white = false;
-    private int AI_moves_ahead = 1;
-
-
+    //
+    // Constructor
+    // -----------------------------
     public Brett(){
 
         initBoard();
         initPieces();
         initLog();
     }
+
+
+    //
+    // Init functions.
+    // -----------------------------
 
     /*
      * Initialises the board.
@@ -116,6 +130,12 @@ public class Brett extends JFrame implements ActionListener{
         log.setVisible(true);
     }
 
+
+
+    //
+    // Action function
+    // -----------------------------
+
     /*
     * Handle Actions
     * */
@@ -162,10 +182,7 @@ public class Brett extends JFrame implements ActionListener{
 
                     //here
 
-                    boolean correct_move = false;
-                    if(state_possibleMoves.contains(i)){
-                        correct_move = true;
-                    }
+                    boolean correct_move = state_possibleMoves.contains(i);
 
                     if(this.state_id == i || !correct_move){
                         this.state = 0;
@@ -223,6 +240,9 @@ public class Brett extends JFrame implements ActionListener{
     }
 
 
+
+
+
     //
     // Helper Function
     // -----------------------------
@@ -231,7 +251,7 @@ public class Brett extends JFrame implements ActionListener{
      * Get the i and j positions on the grid and returns the position in the array. (button array)
      * */
     private int getGridID(int i, int j){
-        return i*8+j;
+        return game.get1DCoordinates(i, j);
     }
 
     /*
@@ -239,12 +259,7 @@ public class Brett extends JFrame implements ActionListener{
      * */
     private int[] getGridID(int ID){
 
-        int[] ret = new int[2];
-
-        ret[0] = ID/8;
-        ret[1] = ID%8;
-
-        return ret;
+        return game.get2DCoordinates(ID);
     }
 
     /*
@@ -269,11 +284,7 @@ public class Brett extends JFrame implements ActionListener{
             return true;
         }
 
-        if(subID > 8 && subID%2 == 1){
-            return true;
-        }
-
-        return false;
+        return subID > 8 && subID % 2 == 1;
     }
 
     /*

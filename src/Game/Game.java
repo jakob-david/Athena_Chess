@@ -339,6 +339,13 @@ public class Game {
     }
 
     /*
+     * Converts the 2D coordinates (2D Game Board) to 1D coordinates (for the Array).
+     * */
+    public int get1DCoordinates(int i, int j){
+        return i*getLengthY()+j;
+    }
+
+    /*
      * Getter is_it_whites_turn
      * */
     public boolean isWhite(){
@@ -359,12 +366,6 @@ public class Game {
     // Small Helper Function
     // -----------------------------
 
-    /*
-     * Converts the 2D coordinates (2D Game Board) to 1D coordinates (for the Array).
-     * */
-    private int get1DCoordinates(int i, int j){
-        return i*getLengthY()+j;
-    }
 
     /*
      * Prints the Game Board to the console.
