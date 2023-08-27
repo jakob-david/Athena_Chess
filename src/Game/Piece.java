@@ -15,31 +15,23 @@ public abstract class Piece {
         this.isWhite = isWhite;
     }
 
+    /*
+     * Gets all possible moves for a Piece.
+     * */
     public abstract List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations);
 
-    protected boolean checkIfOnBoard(int i, int j){
 
-        if(i < 0 || i > 7){
-            return false;
-        }
-
-        if(j < 0 || j > 7){
-            return false;
-        }
-
-        return true;
-    }
-
-    protected int getListValue(int i, int j){
-
-        return i*8+j;
-    }
-
+    /*
+     * Makes a copy of a Piece.
+     * */
     public abstract Piece Copy();
 
 
 
 
+    //
+    // Helper functions for "getMoves".
+    // -----------------------------
 
     /*
      * Checks one field for the king.
@@ -93,4 +85,26 @@ public abstract class Piece {
         return ret;
     }
 
+
+    //
+    // Small Helper functions
+    // -----------------------------
+
+    /*
+     * Gets 1D coordinates from 2D coordinates.
+     * Warning: Only for a 8x8 Board!!!!!!
+     * */
+    protected int getListValue(int i, int j){
+
+        return i*8+j;
+    }
+
+    /*
+     * Checks if a piece is still on the board.
+     * Warning: Only for a 8x8 Board!!!!!!
+     * */
+    protected boolean checkIfOnBoard(int i, int j){
+
+        return i >= 0 && i <= 7 && j >= 0 && j <= 7;
+    }
 }
