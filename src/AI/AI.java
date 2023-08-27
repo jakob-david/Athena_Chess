@@ -12,18 +12,14 @@ public class AI {
 
     final private Game current_board;
 
-    final private int moves_ahead;
-
-    int best_moves_to_keep = 3;
-    int best_move_max_distance = 2;
-    boolean best_move_randomisation;
+    private final AI_Parameters ai_parameters;
 
 
-    public AI(Piece[][] board, boolean is_white, int moves_ahead, boolean best_move_randomisation){
+    //boolean is_white, int moves_ahead, boolean best_move_randomisation
+    public AI(Piece[][] board, AI_Parameters ai_parameters){
 
-        this.current_board = new Game(board, is_white);
-        this.moves_ahead = moves_ahead;
-        this.best_move_randomisation = best_move_randomisation;
+        this.ai_parameters = ai_parameters;
+        this.current_board = new Game(board, ai_parameters.is_white);
     }
 
 
@@ -77,20 +73,20 @@ public class AI {
                         move_value_p2 = getMoveValue(!this.current_board.isWhite()) - move_value_p2;
                     }
 
-                    int recursion_value = recursionStep(moves_ahead);
+                    int recursion_value = recursionStep(ai_parameters.moves_ahead);
 
                     this.current_board.putPieceCopyOnBoard(i, j, from_position);
                     this.current_board.putPieceCopyOnBoard(new_i, new_j, to_position);
 
                     int total_value = move_value_p1 - move_value_p2 + 100 * piece_value + recursion_value;
 
-                    if(best_moves.isEmpty() || total_value > best_moves.get(0).move_value - best_move_max_distance){
+                    if(best_moves.isEmpty() || total_value > best_moves.get(0).move_value - ai_parameters.best_move_max_distance){
                         best_moves.add(new Move(total_value, i, j, new_i, new_j));
                     }
 
                     Collections.sort(best_moves);
 
-                    if(best_moves_to_keep < best_moves.size()){
+                    if(ai_parameters.best_moves_to_keep < best_moves.size()){
                         best_moves.remove(best_moves.size()-1);
                     }
 
@@ -101,7 +97,7 @@ public class AI {
 
         int pick_move = 0;
 
-        if(best_move_randomisation){
+        if(ai_parameters.best_move_randomisation){
             // Info: best_moves.size() is the max but it is not included in the randomisation process.
             pick_move = ThreadLocalRandom.current().nextInt(0, best_moves.size());
         }
@@ -221,7 +217,7 @@ public class AI {
      * */
     private Move makeAIMove(Piece[][] current_board_ref, boolean is_white){
 
-        AI ai = new AI(current_board_ref, is_white, 0, false);
+        AI ai = new AI(current_board_ref, new AI_Parameters(is_white, 0, false));
 
         int[] ai_move_cor = ai.getMove(true);
 

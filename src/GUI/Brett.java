@@ -34,9 +34,8 @@ public class Brett extends JFrame implements ActionListener{
 
     // AI variables
     // -------------------------------
-    private final boolean AI_activated = true;
-    private final boolean AI_is_white = false;
-    private final int AI_moves_ahead = 1;
+    Boolean AI_activated = true;
+    AI_Parameters ai_parameters = new AI_Parameters(false, 1, true);
     // -------------------------------
 
 
@@ -69,13 +68,9 @@ public class Brett extends JFrame implements ActionListener{
             this.grid[i] = new JButton();
             this.grid[i].addActionListener(this);
 
-            //grid[i].setLayout();
             grid[i].setOpaque(true);
 
             colourField(i);
-
-            //this.grid[i].setBackground(Color.WHITE);
-            //this.grid[i].setOpaque(true);
 
             this.panel.add(grid[i]);
         }
@@ -208,9 +203,10 @@ public class Brett extends JFrame implements ActionListener{
                 i++;
             }
 
-            // AI stuff
+            // AI Stuff
+            // -------------------------------
             if(AI_activated){
-                AI ai_player = new AI(game.getGameBoardReference(), AI_is_white, AI_moves_ahead, true);
+                AI ai_player = new AI(game.getGameBoardReference(), ai_parameters);
                 int[] move = ai_player.getMove(false);
 
                 game.movePieceOnBoard(move[0], move[1], move[2], move[3], true);
@@ -223,6 +219,8 @@ public class Brett extends JFrame implements ActionListener{
             } else {
                 game.switchCurrentPlayer();
             }
+            // -------------------------------
+
             this.state = 0;
 
             /*
