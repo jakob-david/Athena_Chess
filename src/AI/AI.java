@@ -129,24 +129,13 @@ public class AI {
 
         // Opponent move
         //------------------
-        AI opponent = new AI(current_board.getGameBoardReference(), !current_board.isWhite(), 0, false);
-        int[] opponent_move = opponent.getMove(true);
-
-
-        Piece opp_from_position = this.current_board.getCopyOfPiece(opponent_move[0], opponent_move[1]);
-        Piece opp_to_position = this.current_board.getCopyOfPiece(opponent_move[2], opponent_move[3]);
-        current_board.movePieceOnBoard(opponent_move[0], opponent_move[1], opponent_move[2], opponent_move[3], false);
+        Move opponent_move = makeAIMove(current_board.getGameBoardReference(), !current_board.isWhite());
         //------------------
 
 
         // "My" next move
         //------------------
-        AI self = new AI(current_board.getGameBoardReference(), current_board.isWhite(), 0, false);
-        int[] self_move = self.getMove(true);
-
-        Piece self_from_position = this.current_board.getCopyOfPiece(self_move[0], self_move[1]);
-        Piece self_to_position = this.current_board.getCopyOfPiece(self_move[2], self_move[3]);
-        current_board.movePieceOnBoard(self_move[0], self_move[1], self_move[2], self_move[3], false);
+        Move own_move = makeAIMove(current_board.getGameBoardReference(), current_board.isWhite());
         //------------------
 
         // Recursion.
@@ -164,19 +153,19 @@ public class AI {
 
         // Self move redone
         //------------------
-        this.current_board.putPieceCopyOnBoard(self_move[0], self_move[1], self_from_position);
-        this.current_board.putPieceCopyOnBoard(self_move[2], self_move[3], self_to_position);
+        redoMove(own_move);
         //------------------
 
 
         // Opponent move redone
         //------------------
-        this.current_board.putPieceCopyOnBoard(opponent_move[0], opponent_move[1], opp_from_position);
-        this.current_board.putPieceCopyOnBoard(opponent_move[2], opponent_move[3], opp_to_position);
+        redoMove(opponent_move);
         //------------------
 
         return return_value;
     }
+
+
 
 
     //
@@ -226,6 +215,36 @@ public class AI {
 
         return sum;
     }
+
+    /*
+     * Makes one AI move on the board and returns this move as a Move object.
+     * */
+    private Move makeAIMove(Piece[][] current_board_ref, boolean is_white){
+
+        AI ai = new AI(current_board_ref, is_white, 0, false);
+
+        int[] ai_move_cor = ai.getMove(true);
+
+        Piece from_position = this.current_board.getCopyOfPiece(ai_move_cor[0], ai_move_cor[1]);
+        Piece to_position = this.current_board.getCopyOfPiece(ai_move_cor[2], ai_move_cor[3]);
+
+        Move am = new Move(ai_move_cor, from_position, to_position);
+
+        current_board.movePieceOnBoard(am.getFromI(), am.getFromJ(), am.getToI(), am.getToJ(), false);
+
+        return  am;
+    }
+
+    /*
+     * Undoes a given move.
+     * */
+    private void redoMove(Move move){
+
+        this.current_board.putPieceCopyOnBoard(move.getFromI(), move.getFromJ(), move.getFrom_pieceCopy());
+        this.current_board.putPieceCopyOnBoard(move.getToI(), move.getToJ(), move.getTo_pieceCopy());
+    }
+
+
 
 
     //
