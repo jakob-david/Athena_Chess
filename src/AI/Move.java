@@ -36,6 +36,17 @@ class Move implements Comparable<Move> {
         move[3] = coordinates[3];
     }
 
+    public Move (int old_i, int old_j, int new_i, int new_j, Piece from_piece, Piece to_piece){
+
+        this.to_piece = to_piece;
+        this.from_piece = from_piece;
+
+        move[0] = old_i;
+        move[1] = old_j;
+        move[2] = new_i;
+        move[3] = new_j;
+    }
+
 
 
 

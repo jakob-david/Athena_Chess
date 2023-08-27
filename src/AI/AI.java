@@ -27,7 +27,7 @@ public class AI {
     public int[] getMove(boolean reduced){
 
 
-        // Make a list to hold to best 3 moves. (At most 3 moves)
+        // Make a list to hold to best x moves. (At most x moves)
         List<Move> best_moves = new ArrayList<>();
 
         for(int i=0; i < this.current_board.getLengthX(); i++){
@@ -59,13 +59,12 @@ public class AI {
                         move_value_p2 = getMoveValue(!this.current_board.isWhite());
                     }
 
-                    Piece from_position = this.current_board.getCopyOfPiece(i, j);
-                    Piece to_position = this.current_board.getCopyOfPiece(new_i, new_j);
+                    Move tmp_move = new Move(i, j, new_i, new_j, this.current_board.getCopyOfPiece(i, j), this.current_board.getCopyOfPiece(new_i, new_j));
 
                     current_board.movePieceOnBoard(i, j, new_i, new_j, false);
 
                     // Take the difference between the old values and the current values.
-                    piece_value = (getPieceValue(!this.current_board.isWhite()) - piece_value) * -1;
+                    piece_value = (getPieceValue(!this.ai_parameters.is_white) - piece_value) * -1;
 
                     // Activate move value if needed.
                     if(!reduced){
@@ -75,10 +74,10 @@ public class AI {
 
                     int recursion_value = recursionStep(ai_parameters.moves_ahead);
 
-                    this.current_board.putPieceCopyOnBoard(i, j, from_position);
-                    this.current_board.putPieceCopyOnBoard(new_i, new_j, to_position);
+                    redoMove(tmp_move);
 
-                    int total_value = move_value_p1 - move_value_p2 + 100 * piece_value + recursion_value;
+                    // Linear Combination
+                    int total_value = getLinearCombination(move_value_p1, move_value_p2, piece_value, recursion_value);
 
                     if(best_moves.isEmpty() || total_value > best_moves.get(0).move_value - ai_parameters.best_move_max_distance){
                         best_moves.add(new Move(total_value, i, j, new_i, new_j));
@@ -143,7 +142,7 @@ public class AI {
         //------------------
         self_piece_value = getPieceValue(current_board.isWhite()) - self_piece_value;
         opponent_piece_value = getPieceValue(!current_board.isWhite()) - opponent_piece_value;
-        int return_value = 100*(self_piece_value - opponent_piece_value) + recursion/2;
+        int return_value = (self_piece_value - opponent_piece_value) + recursion/ ai_parameters.recursion_smoothing;
         //------------------
 
 
@@ -247,6 +246,19 @@ public class AI {
     // Small Helper Function
     // -----------------------------
 
+    /*
+     * Calculates the linear combination to get the value of one move.
+     * */
+    private int getLinearCombination(int own_move_value, int opp_move_value, int opp_piece_value, int recursion_value){
 
+        int ret = 0;
+
+        ret += ai_parameters.own_move_weight * own_move_value;
+        ret += ai_parameters.opp_move_weight * opp_move_value;
+        ret += ai_parameters.opp_piece_weight * opp_piece_value;
+        ret += ai_parameters.recursion_weight * recursion_value;
+
+        return ret;
+    }
 
 }

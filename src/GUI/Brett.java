@@ -176,8 +176,6 @@ public class Brett extends JFrame implements ActionListener{
 
                 if(ae.getSource() == but){
 
-                    //here
-
                     boolean correct_move = state_possibleMoves.contains(i);
 
                     if(this.state_id == i || !correct_move){
@@ -193,10 +191,11 @@ public class Brett extends JFrame implements ActionListener{
                         game.movePieceOnBoard(o[0], o[1], n[0], n[1], true);
 
 
-                        /*Log*/
+                        // Log Stuff
+                        // -------------------------------
                         String tmp_string = "(" + (char)('A'+o[1]) + "," + (8-o[0]) + ") -> (" + (char)('A'+n[1]) + "," + (8-n[0]) + ")";
                         log.addToLog(tmp_string);
-                        /*Log end*/
+                        // -------------------------------
                     }
 
                     break;
@@ -224,16 +223,13 @@ public class Brett extends JFrame implements ActionListener{
 
             this.state = 0;
 
-            /*
-             * Pawn Transition
-             * */
+            // Pawn transition
+            // -------------------------------
             int[] tmp_pawn = game.checkForPawnTransformation(game.isWhite());
             if(tmp_pawn[0] != -1){
                 putPieceOnBoard(tmp_pawn[0], tmp_pawn[1], 'Q', game.isWhite(), game.isWhite()?"WQ":"BQ");
             }
-            /*
-             * Pawn Transition end
-             * */
+            // -------------------------------
 
         }
     }
