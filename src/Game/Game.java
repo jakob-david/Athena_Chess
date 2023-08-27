@@ -36,6 +36,53 @@ public class Game {
         }
     }
 
+    public Game(boolean is_white){
+
+        this.is_it_whites_turn = is_white;
+
+        GameBoard = new Piece[8][8];
+        for(int i=0; i < GameBoard.length; i++){
+            for(int j=0; j < GameBoard[0].length; j++){
+                GameBoard[i][j] = null;
+            }
+        }
+
+        // Pawns
+        for(int j=0; j<8; j++){
+            putPieceOnBoard(6, j, 'P', true);
+        }
+        for(int j=0; j<8; j++){
+            putPieceOnBoard(1, j, 'P', false);
+        }
+
+        // Rooks
+        putPieceOnBoard(0, 0, 'R', false);
+        putPieceOnBoard(0, 7, 'R', false);
+        putPieceOnBoard(7, 0, 'R', true);
+        putPieceOnBoard(7, 7, 'R', true);
+
+        // Knights
+        putPieceOnBoard(0, 1, 'N', false);
+        putPieceOnBoard(0, 6, 'N', false);
+        putPieceOnBoard(7, 1, 'N', true);
+        putPieceOnBoard(7, 6, 'N', true);
+
+        // Bishops
+        putPieceOnBoard(0, 2, 'B', false);
+        putPieceOnBoard(0, 5, 'B', false);
+        putPieceOnBoard(7, 2, 'B', true);
+        putPieceOnBoard(7, 5, 'B', true);
+
+        // Queens
+        putPieceOnBoard(0, 3, 'Q', false);
+        putPieceOnBoard(7, 3, 'Q', true);
+
+        // Kings
+        putPieceOnBoard(0, 4, 'K', false);
+        putPieceOnBoard(7, 4, 'K', true);
+
+    }
+
 
 
     //
@@ -135,7 +182,7 @@ public class Game {
         Piece from_position = getCopyOfPiece(old_i, old_j);
         Piece to_position = getCopyOfPiece(new_i, new_j);
 
-        movePieceOnBoard(old_i, old_j, new_i, new_j, false);
+        makeMove(old_i, old_j, new_i, new_j, false);
 
         // get King position.
         for(int m = 0; m < 8; m++){
@@ -237,7 +284,41 @@ public class Game {
     /*
      * Moves one piece from one location to another. The "old" position becomes "null".
      * */
-    public void movePieceOnBoard(int old_i, int old_j, int new_i, int new_j, boolean human_move){
+    public void makeMove(int old_i, int old_j, int new_i, int new_j, boolean human_move){
+
+        Piece tmp_piece;
+        if(null != GameBoard[old_i][old_j]){
+            tmp_piece = GameBoard[old_i][old_j].Copy();
+        } else {
+            tmp_piece = null;
+        }
+        GameBoard[old_i][old_j] = null;
+        GameBoard[new_i][new_j] = tmp_piece;
+
+        if(null != GameBoard[new_i][new_j] && GameBoard[new_i][new_j].name == 'P'){
+
+            // Not the best I know....
+            ((Pawn) GameBoard[new_i][new_j]).setFirstMove();
+        }
+
+        if(!human_move) {
+            int[] tmp_pawn = checkForPawnTransformation(isWhite());
+            if (tmp_pawn[0] != -1) {
+                putPieceOnBoard(tmp_pawn[0], tmp_pawn[1], 'Q', isWhite());
+            }
+        }
+
+        if (human_move) {
+            printMatrix();
+        }
+    }
+
+    public void makeMove(AI.Move move, boolean human_move){
+
+        int old_i = move.getFromI();
+        int old_j = move.getFromJ();
+        int new_i = move.getToI();
+        int new_j = move.getToJ();
 
         Piece tmp_piece;
         if(null != GameBoard[old_i][old_j]){

@@ -188,7 +188,7 @@ public class Brett extends JFrame implements ActionListener{
 
                         int[] o = getGridID(state_id);
                         int[] n = getGridID(i);
-                        game.movePieceOnBoard(o[0], o[1], n[0], n[1], true);
+                        game.makeMove(o[0], o[1], n[0], n[1], true);
 
 
                         // Log Stuff
@@ -207,12 +207,12 @@ public class Brett extends JFrame implements ActionListener{
             // -------------------------------
             if(AI_activated){
                 AI ai_player = new AI(game.getGameBoardReference(), ai_parameters);
-                int[] move = ai_player.getMove(false);
+                Move move = ai_player.getMove(false);
 
-                game.movePieceOnBoard(move[0], move[1], move[2], move[3], true);
+                game.makeMove(move.getFromI(), move.getFromJ(), move.getToI(), move.getToJ(), true);
 
-                int old_id = getGridID(move[0], move[1]);
-                int new_id = getGridID(move[2], move[3]);
+                int old_id = getGridID(move.getFromI(), move.getFromJ());
+                int new_id = getGridID(move.getToI(), move.getToJ());
                 this.grid[new_id].setText(this.grid[old_id].getText());
                 this.grid[old_id].setText("");
 

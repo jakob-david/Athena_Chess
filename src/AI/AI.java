@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class AI {
 
-    final private Game current_board;
+    private Game current_board;
 
     private final AI_Parameters ai_parameters;
 
@@ -24,7 +24,7 @@ public class AI {
 
 
 
-    public int[] getMove(boolean reduced){
+    public Move getMove(boolean reduced){
 
 
         // Make a list to hold to best x moves. (At most x moves)
@@ -61,7 +61,7 @@ public class AI {
 
                     Move tmp_move = new Move(i, j, new_i, new_j, this.current_board.getCopyOfPiece(i, j), this.current_board.getCopyOfPiece(new_i, new_j));
 
-                    current_board.movePieceOnBoard(i, j, new_i, new_j, false);
+                    current_board.makeMove(i, j, new_i, new_j, false);
 
                     // Take the difference between the old values and the current values.
                     piece_value = (getPieceValue(!this.ai_parameters.is_white) - piece_value) * -1;
@@ -101,7 +101,11 @@ public class AI {
             pick_move = ThreadLocalRandom.current().nextInt(0, best_moves.size());
         }
 
-        return best_moves.get(pick_move).move;
+        if(best_moves.isEmpty()){
+            return new Move(true);
+        }
+
+        return best_moves.get(pick_move);
     }
 
 
@@ -191,7 +195,7 @@ public class AI {
     /*
      * Returns the sum of the values of all the pieces of the player specified.
      * */
-    private int getPieceValue(boolean is_white){
+    public int getPieceValue(boolean is_white){
 
         int sum = 0;
 
@@ -218,14 +222,12 @@ public class AI {
 
         AI ai = new AI(current_board_ref, new AI_Parameters(is_white, 0, false));
 
-        int[] ai_move_cor = ai.getMove(true);
+        Move am = ai.getMove(true);
 
-        Piece from_position = this.current_board.getCopyOfPiece(ai_move_cor[0], ai_move_cor[1]);
-        Piece to_position = this.current_board.getCopyOfPiece(ai_move_cor[2], ai_move_cor[3]);
+        am.setFromPiece(this.current_board.getCopyOfPiece(am.getFromI(), am.getFromJ()));
+        am.setToPiece(this.current_board.getCopyOfPiece(am.getToI(), am.getToJ()));
 
-        Move am = new Move(ai_move_cor, from_position, to_position);
-
-        current_board.movePieceOnBoard(am.getFromI(), am.getFromJ(), am.getToI(), am.getToJ(), false);
+        current_board.makeMove(am.getFromI(), am.getFromJ(), am.getToI(), am.getToJ(), false);
 
         return  am;
     }
@@ -239,6 +241,14 @@ public class AI {
         this.current_board.putPieceCopyOnBoard(move.getToI(), move.getToJ(), move.getTo_pieceCopy());
     }
 
+
+    //
+    // Setter functions
+    // -----------------------------
+
+    public void setGameBoard(Piece[][] board){
+        this.current_board = new Game(board, ai_parameters.is_white);
+    }
 
 
 

@@ -2,7 +2,7 @@ package AI;
 
 import Game.Piece;
 
-class Move implements Comparable<Move> {
+public class Move implements Comparable<Move> {
 
     int move_value;
     int[] move = new int[4];
@@ -10,6 +10,7 @@ class Move implements Comparable<Move> {
     Piece from_piece;
     Piece to_piece;
 
+    boolean no_move_possible = false;
 
     //
     // Constructors
@@ -47,7 +48,9 @@ class Move implements Comparable<Move> {
         move[3] = new_j;
     }
 
-
+    public Move(boolean no_move_possible){
+        this.no_move_possible = no_move_possible;
+    }
 
 
     //
@@ -91,6 +94,27 @@ class Move implements Comparable<Move> {
     }
 
 
+    //
+    // Setter
+    // -----------------------------
+
+    public void setFromPiece(Piece from_piece){
+
+        if(null == from_piece){
+            this.from_piece = null;
+        } else {
+            this.from_piece = from_piece.Copy();
+        }
+    }
+
+    public void setToPiece(Piece to_piece){
+
+        if(null == to_piece){
+            this.to_piece = null;
+        } else {
+            this.to_piece = to_piece.Copy();
+        }
+    }
 
     //
     // Compare

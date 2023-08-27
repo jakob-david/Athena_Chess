@@ -9,7 +9,7 @@ public class Main {
 
 
         Trainer trainer = new Trainer();
-        trainer.test();
+        trainer.train();
 
 
 

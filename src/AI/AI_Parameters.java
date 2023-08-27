@@ -47,7 +47,7 @@ public class AI_Parameters {
         initLinearCombinationDefault();
     }
 
-    private void initLinearCombinationDefault(){
+    public void initLinearCombinationDefault(){
         own_move_weight = 1;
         opp_move_weight = 1;
         opp_piece_weight = 100;
@@ -56,7 +56,7 @@ public class AI_Parameters {
         recursion_smoothing = 2;
     }
 
-    private void initLinearCombinationLearning(){
+    public void initLinearCombinationLearning(){
         own_move_weight = 1;
         opp_move_weight = 1;
         opp_piece_weight = 1;
