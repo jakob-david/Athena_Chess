@@ -51,9 +51,9 @@ public abstract class Piece {
     }
 
     /*
-     * Examines one be possible diagonal.
+     * Examines one be possible diagonal/horizontal/vertical.
      * */
-    protected List<Integer> examineDiagonal(int i, int j, int dir_i, int dir_j, boolean[][] locations, boolean[][] own_locations){
+    private List<Integer> examineLine(int i, int j, int dir_i, int dir_j, boolean[][] locations, boolean[][] own_locations){
 
         List<Integer> ret = new ArrayList<>();
 
@@ -81,6 +81,38 @@ public abstract class Piece {
                 break;
             }
         }
+
+        return ret;
+    }
+
+    /*
+     * Checks Rook moves.
+     * */
+    protected List<Integer> checkRookMoves(int i, int j, boolean[][] locations, boolean[][] own_locations){
+
+        List<Integer> ret = new ArrayList<>();
+
+        // Rook Moves
+        ret.addAll(examineLine(i, j, 1, 0, locations, own_locations));
+        ret.addAll(examineLine(i, j, -1, 0, locations, own_locations));
+        ret.addAll(examineLine(i, j, 0, 1, locations, own_locations));
+        ret.addAll(examineLine(i, j, 0, -1, locations, own_locations));
+
+        return ret;
+    }
+
+    /*
+     * Checks Bishop moves.
+     * */
+    protected List<Integer> checkBishopMoves(int i, int j, boolean[][] locations, boolean[][] own_locations){
+
+        List<Integer> ret = new ArrayList<>();
+
+        // Bishop Moves
+        ret.addAll(examineLine(i, j, 1, 1, locations, own_locations));
+        ret.addAll(examineLine(i, j, 1, -1, locations, own_locations));
+        ret.addAll(examineLine(i, j, -1, 1, locations, own_locations));
+        ret.addAll(examineLine(i, j, -1, -1, locations, own_locations));
 
         return ret;
     }

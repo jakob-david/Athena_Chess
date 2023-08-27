@@ -18,15 +18,7 @@ public class Bishop extends Piece {
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
-        List<Integer> ret = new ArrayList<>();
-
-
-        ret.addAll(examineDiagonal(i, j, 1, 1, locations, own_locations));
-        ret.addAll(examineDiagonal(i, j, 1, -1, locations, own_locations));
-        ret.addAll(examineDiagonal(i, j, -1, 1, locations, own_locations));
-        ret.addAll(examineDiagonal(i, j, -1, -1, locations, own_locations));
-
-        return ret;
+        return new ArrayList<>(checkBishopMoves(i, j, locations, own_locations));
     }
 
 
