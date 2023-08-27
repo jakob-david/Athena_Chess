@@ -1,5 +1,9 @@
 package AI;
 
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.File;
+
 public class AI_Parameters {
 
     // Basic parameters
@@ -56,5 +60,34 @@ public class AI_Parameters {
         recursion_weight = 1;
 
         recursion_smoothing = 2;
+    }
+
+    public void writeToFile(){
+        String str = toString();
+        File file = new File("/src/AI/AI_Data.txt");
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file.getName()));
+            writer.write(str);
+
+            writer.close();
+        }
+
+        catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    @Override
+    public String toString() {
+
+        String ret_string = "";
+
+        ret_string += "Basic parameters\n-------------------------------";
+        ret_string += "is_white: " + (is_white?"true":"false") + "\n";
+        ret_string += "moves_ahead: " + moves_ahead + "\n";
+        ret_string += "-------------------------------\n";
+
+        return ret_string;
     }
 }

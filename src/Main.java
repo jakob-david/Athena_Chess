@@ -1,3 +1,4 @@
+import AI.Trainer;
 import GUI.Brett;
 
 import javax.swing.*;
@@ -5,6 +6,11 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+
+
+        Trainer trainer = new Trainer();
+        trainer.test();
+
 
 
         //Brett obj = new Brett();q
