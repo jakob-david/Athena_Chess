@@ -167,7 +167,8 @@ public class Brett extends JFrame implements ActionListener{
         } else if (this.state == 1) {
 
 
-            this.state_possibleMoves.forEach((c) -> colourField(c));
+            // this.state_possibleMoves.forEach((c) -> colourField(c));
+            this.state_possibleMoves.forEach(this::colourField);
 
             int i = 0;
             for(JButton but: grid){
