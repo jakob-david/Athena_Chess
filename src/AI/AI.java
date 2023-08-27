@@ -3,6 +3,7 @@ package AI;
 import Game.Game;
 import Game.Piece;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -87,8 +88,7 @@ public class AI {
                         best_moves.add(new Move(total_value, i, j, new_i, new_j));
                     }
 
-                    // TODO: Need to find better solution
-                    best_moves.sort(best_moves.get(0));
+                    Collections.sort(best_moves);
 
                     if(best_moves_to_keep < best_moves.size()){
                         best_moves.remove(best_moves.size()-1);
@@ -97,6 +97,7 @@ public class AI {
                 }
             }
         }
+
 
         int pick_move = 0;
 

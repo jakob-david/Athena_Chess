@@ -1,8 +1,6 @@
 package AI;
 
-import java.util.Comparator;
-
-class Move implements Comparator<Move> {
+class Move implements Comparable<Move> {
 
     int move_value;
     int[] move = new int[4];
@@ -17,9 +15,8 @@ class Move implements Comparator<Move> {
         move[3] = to_j;
     }
 
-
     @Override
-    public int compare(Move m1, Move m2) {
-        return m2.move_value - m1.move_value;
+    public int compareTo(Move m) {
+        return m.move_value - this.move_value;
     }
 }
