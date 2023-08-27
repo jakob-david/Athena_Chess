@@ -17,8 +17,6 @@ public class Pawn extends Piece {
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
-        List<Integer> ret = new ArrayList<>();
-
         int direction;
         if(this.isWhite){
             direction = -1;
@@ -26,35 +24,23 @@ public class Pawn extends Piece {
             direction = 1;
         }
 
-        int tmp_i;
-        int tmp_j;
 
-        // move ahead
-        tmp_i = i + direction;
-        tmp_j = j;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
+        // initialise array and move ahead.
+        List<Integer> ret = new ArrayList<>(checkOneTile(i, j, direction, 0, own_locations));
+
+        // move direction one.
+        if(checkIfOnBoard(i + direction, j-1) && locations[i + direction][j-1]){
+            ret.addAll(checkOneTile(i, j, direction, -1, own_locations));
         }
 
-        // move left
-        tmp_i = i + direction;
-        tmp_j = j - 1 ;
-        if(checkIfOnBoard(tmp_i, tmp_j) && locations[tmp_i][tmp_j] && !own_locations[tmp_i][tmp_j]){
-            ret.add(getListValue(tmp_i, tmp_j));
-        }
-
-        // move left
-        tmp_i = i + direction;
-        tmp_j = j + 1 ;
-        if(checkIfOnBoard(tmp_i, tmp_j) && locations[tmp_i][tmp_j] && !own_locations[tmp_i][tmp_j]) {
-            ret.add(getListValue(tmp_i, tmp_j));
+        // move direction two.
+        if(checkIfOnBoard(i + direction, j+1) && locations[i + direction][j + 1]){
+            ret.addAll(checkOneTile(i, j, direction, +1, own_locations));
         }
 
         // two forward
-        tmp_i = i + direction + direction;
-        tmp_j = j;
-        if(checkIfOnBoard(tmp_i, tmp_j) && !locations[tmp_i][tmp_j] && this.first_move) {
-            ret.add(getListValue(tmp_i, tmp_j));
+        if(this.first_move){
+            ret.addAll(checkOneTile(i, j, direction + direction, 0, own_locations));
         }
 
         return ret;
