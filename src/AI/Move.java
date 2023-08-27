@@ -10,6 +10,11 @@ class Move implements Comparable<Move> {
     Piece from_piece;
     Piece to_piece;
 
+
+    //
+    // Constructors
+    // -----------------------------
+
     public Move (int move_value, int from_i, int from_j, int to_i, int to_j){
 
         this.move_value = move_value;
@@ -30,6 +35,8 @@ class Move implements Comparable<Move> {
         move[2] = coordinates[2];
         move[3] = coordinates[3];
     }
+
+
 
 
     //
@@ -71,6 +78,12 @@ class Move implements Comparable<Move> {
         }
 
     }
+
+
+
+    //
+    // Compare
+    // -----------------------------
 
     @Override
     public int compareTo(Move m) {
