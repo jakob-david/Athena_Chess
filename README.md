@@ -6,7 +6,7 @@ Small chess game with an even smaller AI opponent.....
 ## Basic information about the chess logic
 The chess game is able to do all moves except: 
 1. Castling
-2. en pasant
+2. en passant
 3. pawn promotion to something els than a queen 
 
 ## Basic information about the AI. 
