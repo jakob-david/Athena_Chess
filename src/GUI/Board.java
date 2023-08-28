@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 
-public class Brett extends JFrame implements ActionListener{
+public class Board extends JFrame implements ActionListener{
 
     private final Game game = new Game();
 
@@ -42,11 +42,23 @@ public class Brett extends JFrame implements ActionListener{
     //
     // Constructor
     // -----------------------------
-    public Brett(){
+    public Board(){
 
         initBoard();
         initPieces();
         initLog();
+
+        // Sent font.
+        Font f = grid[0].getFont().deriveFont(40.0f);
+        for(JButton button : grid){
+            button.setFont(f);
+        }
+
+        // Make first move with white and switch to black player as human.
+        if(AI_activated && ai_parameters.is_white){
+            AIAction();
+            game.switchCurrentPlayer();
+        }
     }
 
 
@@ -84,37 +96,37 @@ public class Brett extends JFrame implements ActionListener{
 
         // Pawns
         for(int j=0; j<8; j++){
-            putPieceOnBoard(6, j, 'P', true, "WP");
+            putPieceOnBoard(6, j, 'P', true, "♙");
         }
         for(int j=0; j<8; j++){
-            putPieceOnBoard(1, j, 'P', false, "BP");
+            putPieceOnBoard(1, j, 'P', false, "♟");
         }
 
         // Rooks
-        putPieceOnBoard(0, 0, 'R', false, "BR");
-        putPieceOnBoard(0, 7, 'R', false, "BR");
-        putPieceOnBoard(7, 0, 'R', true, "WR");
-        putPieceOnBoard(7, 7, 'R', true, "WR");
+        putPieceOnBoard(0, 0, 'R', false, "♜");
+        putPieceOnBoard(0, 7, 'R', false, "♜");
+        putPieceOnBoard(7, 0, 'R', true, "♖");
+        putPieceOnBoard(7, 7, 'R', true, "♖");
 
         // Knights
-        putPieceOnBoard(0, 1, 'N', false, "BN");
-        putPieceOnBoard(0, 6, 'N', false, "BN");
-        putPieceOnBoard(7, 1, 'N', true, "WN");
-        putPieceOnBoard(7, 6, 'N', true, "WN");
+        putPieceOnBoard(0, 1, 'N', false, "♞");
+        putPieceOnBoard(0, 6, 'N', false, "♞");
+        putPieceOnBoard(7, 1, 'N', true, "♘");
+        putPieceOnBoard(7, 6, 'N', true, "♘");
 
         // Bishops
-        putPieceOnBoard(0, 2, 'B', false, "BB");
-        putPieceOnBoard(0, 5, 'B', false, "BB");
-        putPieceOnBoard(7, 2, 'B', true, "WB");
-        putPieceOnBoard(7, 5, 'B', true, "WB");
+        putPieceOnBoard(0, 2, 'B', false, "♝");
+        putPieceOnBoard(0, 5, 'B', false, "♝");
+        putPieceOnBoard(7, 2, 'B', true, "♗");
+        putPieceOnBoard(7, 5, 'B', true, "♗");
 
         // Queens
-        putPieceOnBoard(0, 3, 'Q', false, "BQ");
-        putPieceOnBoard(7, 3, 'Q', true, "WQ");
+        putPieceOnBoard(0, 3, 'Q', false, "♛");
+        putPieceOnBoard(7, 3, 'Q', true, "♕");
 
         // Kings
-        putPieceOnBoard(0, 4, 'K', false, "BK");
-        putPieceOnBoard(7, 4, 'K', true, "WK");
+        putPieceOnBoard(0, 4, 'K', false, "♚");
+        putPieceOnBoard(7, 4, 'K', true, "♔");
 
     }
 
@@ -209,7 +221,7 @@ public class Brett extends JFrame implements ActionListener{
                     // Log Stuff
                     // -------------------------------
                     String tmp_string = "(" + (char)('A'+o[1]) + "," + (8-o[0]) + ") -> (" + (char)('A'+n[1]) + "," + (8-n[0]) + ")";
-                    log.addToLog(tmp_string);
+                    log.addToLog(tmp_string, game.isWhite());
                     // -------------------------------
                 }
 
@@ -221,20 +233,13 @@ public class Brett extends JFrame implements ActionListener{
         // AI Stuff
         // -------------------------------
         if(AI_activated){
-            AI ai_player = new AI(game.getGameBoardReference(), ai_parameters);
-            Move move = ai_player.getMove(false);
-
-            game.makeMove(move.getFromI(), move.getFromJ(), move.getToI(), move.getToJ(), true);
-
-            int old_id = getGridID(move.getFromI(), move.getFromJ());
-            int new_id = getGridID(move.getToI(), move.getToJ());
-            this.grid[new_id].setText(this.grid[old_id].getText());
-            this.grid[old_id].setText("");
-
+            AIAction();
         } else {
             game.switchCurrentPlayer();
         }
         // -------------------------------
+
+
 
         this.state = 0;
 
@@ -242,10 +247,31 @@ public class Brett extends JFrame implements ActionListener{
         // -------------------------------
         int[] tmp_pawn = game.checkForPawnTransformation(game.isWhite());
         if(tmp_pawn[0] != -1){
-            putPieceOnBoard(tmp_pawn[0], tmp_pawn[1], 'Q', game.isWhite(), game.isWhite()?"WQ":"BQ");
+            putPieceOnBoard(tmp_pawn[0], tmp_pawn[1], 'Q', game.isWhite(), game.isWhite()?"♕":"♛");
         }
         // -------------------------------
 
+    }
+
+    /*
+     * Performs an AI Action on the board.
+     * */
+    private void AIAction(){
+        AI ai_player = new AI(game.getGameBoardReference(), ai_parameters);
+        Move move = ai_player.getMove(false);
+
+        game.makeMove(move.getFromI(), move.getFromJ(), move.getToI(), move.getToJ(), true);
+
+        int old_id = getGridID(move.getFromI(), move.getFromJ());
+        int new_id = getGridID(move.getToI(), move.getToJ());
+        this.grid[new_id].setText(this.grid[old_id].getText());
+        this.grid[old_id].setText("");
+
+        // Log Stuff
+        // -------------------------------
+        String tmp_string = "(" + (char)('A'+move.getFromJ()) + "," + (8-move.getFromI()) + ") -> (" + (char)('A'+move.getToJ()) + "," + (8-move.getToI()) + ")";
+        log.addToLog(tmp_string, !game.isWhite());
+        // -------------------------------
     }
 
 

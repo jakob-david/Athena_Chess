@@ -4,8 +4,6 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AI_Parameters {
 
@@ -13,7 +11,7 @@ public class AI_Parameters {
 
     // Basic parameters
     // -------------------------------
-    boolean is_white;
+    public boolean is_white;
     int moves_ahead;
     // -------------------------------
 

@@ -24,9 +24,12 @@ public class Pawn extends Piece {
             direction = 1;
         }
 
+        List<Integer> ret = new ArrayList<>();
 
-        // initialise array and move ahead.
-        List<Integer> ret = new ArrayList<>(checkOneTile(i, j, direction, 0, own_locations));
+        // move one ahead.
+        if(checkIfOnBoard(i+direction, j) && !locations[i+direction][j]){
+            ret.addAll(checkOneTile(i, j, direction, 0, own_locations));
+        }
 
         // move direction one.
         if(checkIfOnBoard(i + direction, j-1) && locations[i + direction][j-1]){
@@ -39,7 +42,7 @@ public class Pawn extends Piece {
         }
 
         // two forward
-        if(this.first_move){
+        if(this.first_move && !locations[i+direction][j] && !locations[i+direction+direction][j]){
             ret.addAll(checkOneTile(i, j, direction + direction, 0, own_locations));
         }
 

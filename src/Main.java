@@ -1,5 +1,5 @@
 import AI.Trainer;
-import GUI.Brett;
+import GUI.Board;
 
 import javax.swing.*;
 
@@ -25,7 +25,7 @@ public class Main {
 
         // Create and show the GUI
         SwingUtilities.invokeLater(() -> {
-            Brett obj = new Brett();
+            Board obj = new Board();
             obj.setVisible(true);
 
             //Log log = new Log();
