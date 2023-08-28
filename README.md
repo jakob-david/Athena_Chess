@@ -1,15 +1,15 @@
-# Athena_Chess
+## Athena_Chess
 
 Small chess game with an even smaller AI opponent.....
 
 
-## Basic information about the chess logic
+### Basic information about the chess logic
 The chess game is able to do all moves except: 
 1. Castling
 2. en passant
 3. pawn promotion to something els than a queen 
 
-## Basic information about the AI. 
+### Basic information about the AI. 
 The AI calculates four parameters to decide which move to take: 
 
 1. How many moves it can make more after a possible move is taken. 
@@ -20,13 +20,13 @@ The AI calculates four parameters to decide which move to take:
 To evaluate how good one move is a linear combination is taken. 
 The weights for the combination is derived by a training process. 
 
-### Recursion 
+#### Recursion 
 Each recursive step plays one move from the opponent and one move for one self. 
 Both chosen by an AI without recursion. 
 Moreover, the AI is reduced to only include the "piece value" (point 3).
 After that the move value gets evaluated and returned. Each recursion returns the value divided by 2 in order to get some smoothing. 
 
-### Training 
+#### Training 
 The training is very simple. First two AIs get initialised: 
 
 1. best_AI
