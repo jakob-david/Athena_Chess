@@ -8,53 +8,95 @@ public class Trainer {
     public void train(){
 
         AI_Parameters best_parameters = new AI_Parameters(true, 0, false);
-        best_parameters.initLinearCombinationLearning();
-
-        AI_Parameters parameters = new AI_Parameters(true, 0, false);
-        parameters.initLinearCombinationLearning();
 
 
-        playGame();
+        for(int i=0; i<2; i++){
+            best_parameters = updateParameters(best_parameters, 5, 20);
+        }
 
+        best_parameters.writeToFile();
     }
 
-    private void playGame(){
+
+    private AI_Parameters updateParameters(AI_Parameters parameters, int games, int rounds){
+
+        AI_Parameters best_parameters = parameters.Copy();
+        AI_Parameters new_parameters = best_parameters.Copy();
+
+        for(int i=0; i<4; i++){
+            best_parameters.weights[i] = 1;
+            new_parameters.weights[i] = 2;
+
+            while(true){
+                int score = makeSimulation(best_parameters, new_parameters, games, rounds);
+
+                if(score < -1){
+                    best_parameters = new_parameters.Copy();
+                    new_parameters.weights[i]++;
+                    System.out.println("parameter " + (i+1) + "....updated");
+                } else {
+                    System.out.println("BEST VALUE FOUND: parameter" + (i+1));
+                    break;
+                }
+            }
+        }
+
+        return best_parameters;
+    }
+
+
+
+
+    private int makeSimulation(AI_Parameters best_parameters, AI_Parameters new_parameters, int games, int rounds){
+
+        best_parameters.setIsWhite(true);
+        new_parameters.setIsWhite(false);
+        int score = 0;
+
+        for(int i = 0; i < games; i++){
+            score += playGame(best_parameters, new_parameters, rounds);
+        }
+
+        best_parameters.setIsWhite(false);
+        new_parameters.setIsWhite(true);
+
+        for(int i = 0; i < games; i++){
+            // -= since now best_parameters is second.
+            score -= playGame(new_parameters, best_parameters, rounds);
+        }
+
+        return score;
+    }
+
+    private int playGame(AI_Parameters white_parameters, AI_Parameters black_parameters, int rounds){
 
         Game game = new Game(true);
 
         Move move;
 
-        AI_Parameters white_parameters = new AI_Parameters(true, 0, false);
-        AI_Parameters black_parameters = new AI_Parameters(false, 0, false);
-
         AI white = new AI(game.getGameBoardReference(), white_parameters);
         AI black = new AI(game.getGameBoardReference(), black_parameters);
 
-        for(int i = 0; i < 50; i++){
+        for(int i = 0; i < rounds; i++){
 
             white.setGameBoard(game.getGameBoardReference());
             move = white.getMove(false);
 
             if(move.no_move_possible){
-                System.out.println("white won");
-                break;
+                return -1;  // black won
             } else {
                 game.makeMove(move, false);
             }
 
-            game.printMatrix();
 
             black.setGameBoard(game.getGameBoardReference());
             move = black.getMove(false);
 
             if(move.no_move_possible){
-                System.out.println("black won");
-                break;
+                return 1;  // white won
             } else {
                 game.makeMove(move, false);
             }
-
-            game.printMatrix();
         }
 
         white.setGameBoard(game.getGameBoardReference());
@@ -62,16 +104,12 @@ public class Trainer {
         int black_value = white.getPieceValue(false);
 
 
-        System.out.println("white: " + white_value);
-        System.out.println("black: " + black_value);
         if(white_value > black_value){
-            System.out.println("white won");
+            return 1;  // white won
         } else if(black_value > white_value){
-            System.out.println("black won");
+            return -1;  // black won
         } else {
-            System.out.println("draw");
+            return 0;  // draw
         }
-
-
     }
 }

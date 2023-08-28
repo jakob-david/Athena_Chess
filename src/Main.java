@@ -8,8 +8,8 @@ public class Main {
     public static void main(String[] args) {
 
 
-        Trainer trainer = new Trainer();
-        trainer.train();
+         Trainer trainer = new Trainer();
+         //trainer.train();
 
 
 

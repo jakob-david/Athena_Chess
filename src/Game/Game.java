@@ -175,38 +175,13 @@ public class Game {
         int new_i = tmp[0];
         int new_j = tmp[1];
 
-        int king_i = -1;
-        int king_j = -1;
-
 
         Piece from_position = getCopyOfPiece(old_i, old_j);
         Piece to_position = getCopyOfPiece(new_i, new_j);
 
         makeMove(old_i, old_j, new_i, new_j, false);
 
-        // get King position.
-        for(int m = 0; m < 8; m++){
-            for(int n = 0; n < 8; n++){
-
-                if(         GameBoard[m][n] != null
-                        &&  GameBoard[m][n].name == 'K'
-                        &&  GameBoard[m][n].isWhite == is_it_whites_turn
-                ){
-                    king_i = m;
-                    king_j = n;
-                }
-            }
-        }
-
-        int king_id = -1;
-        // get King id
-        if(king_i < 0){
-            System.err.println("Error: King not found");
-        } else {
-            king_id = get1DCoordinates(king_i, king_j);
-        }
-
-
+        int king_id = getKingID(from_position.isWhite);
 
         for(int m=0; m < getLengthX(); m++){
             for(int n=0; n<getLengthY(); n++){
@@ -238,6 +213,23 @@ public class Game {
     }
 
 
+    private int getKingID(boolean is_white){
+
+        for(int m = 0; m < 8; m++){
+            for(int n = 0; n < 8; n++){
+
+                if(         GameBoard[m][n] != null
+                        &&  GameBoard[m][n].name == 'K'
+                        &&  GameBoard[m][n].isWhite == is_white
+                ){
+                    return get1DCoordinates(m, n);
+                }
+            }
+        }
+
+        System.err.println("Error: King not found");
+        return -1;
+    }
 
 
     //
@@ -458,9 +450,9 @@ public class Game {
             for (Piece piece : pieces) {
 
                 if (null == piece) {
-                    System.out.print(". ");
+                    System.out.print(" . ");
                 } else {
-                    System.out.print(piece.name + " ");
+                    System.out.print((piece.isWhite?"w":"b") + piece.name + " ");
                 }
             }
             System.out.println();

@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AI_Parameters {
 
@@ -23,11 +25,13 @@ public class AI_Parameters {
     // -------------------------------
 
     // Linear combination parameters
+    // 0...Own move value weight.
+    // 1...Opponent move value weight.
+    // 2...Opponent piece value weight.
+    // 3...Recursion weight.
     // -------------------------------
-    int own_move_weight;    // Own move value weight.
-    int opp_move_weight;    // Opponent move value weight.
-    int opp_piece_weight;   // Opponent piece value weight.
-    int recursion_weight;   // Recursion weight.
+    int[] weights = new int[4];
+    //List<String> labels = new ArrayList<String>();
     // -------------------------------
 
     // Recursion parameters
@@ -44,27 +48,17 @@ public class AI_Parameters {
         this.best_moves_to_keep = 3;
         this.best_move_max_distance = 2;
 
-        initLinearCombinationDefault();
+        this.recursion_smoothing = 2;
+
+        readFromFile();
     }
 
-    public void initLinearCombinationDefault(){
-        own_move_weight = 1;
-        opp_move_weight = 1;
-        opp_piece_weight = 100;
-        recursion_weight = 100;
-
-        recursion_smoothing = 2;
+    public AI_Parameters(){
     }
 
-    public void initLinearCombinationLearning(){
-        own_move_weight = 1;
-        opp_move_weight = 1;
-        opp_piece_weight = 1;
-        recursion_weight = 1;
-
-        recursion_smoothing = 2;
+    public void setIsWhite(boolean is_white){
+        this.is_white = is_white;
     }
-
 
     /*
      * Write training data to file.
@@ -97,13 +91,13 @@ public class AI_Parameters {
                     data = myReader.nextLine();
 
                     if(data.contains("own_move_weight")){
-                        this.own_move_weight = Integer.parseInt(myReader.nextLine());
+                        this.weights[0] = Integer.parseInt(myReader.nextLine());
                     } else if (data.contains("opp_move_weight")) {
-                        this.opp_move_weight = Integer.parseInt(myReader.nextLine());
+                        this.weights[1] = Integer.parseInt(myReader.nextLine());
                     } else if (data.contains("opp_piece_weight")) {
-                        this.opp_piece_weight = Integer.parseInt(myReader.nextLine());
+                        this.weights[2] = Integer.parseInt(myReader.nextLine());
                     } else if (data.contains("recursion_weight")) {
-                        this.recursion_weight = Integer.parseInt(myReader.nextLine());
+                        this.weights[3] = Integer.parseInt(myReader.nextLine());
                     }
                 }
                 myReader.close();
@@ -124,15 +118,35 @@ public class AI_Parameters {
 
         ret_string += "Linear combination parameters\n-------------------------------\n";
         ret_string += "own_move_weight: \n";
-        ret_string += own_move_weight + "\n";
+        ret_string += weights[0] + "\n";
         ret_string += "opp_move_weight: \n";
-        ret_string +=  opp_move_weight + "\n";
+        ret_string += weights[1] + "\n";
         ret_string += "opp_piece_weight: \n";
-        ret_string += opp_piece_weight + "\n";
+        ret_string += weights[2] + "\n";
         ret_string += "recursion_weight: \n";
-        ret_string += recursion_weight + "\n";
+        ret_string += weights[3] + "\n";
         ret_string += "-------------------------------\n\n";
 
         return ret_string;
+    }
+
+    public AI_Parameters Copy(){
+        AI_Parameters ret = new AI_Parameters();
+
+        ret.is_white = this.is_white;
+        ret.moves_ahead = this.moves_ahead;
+
+        ret.best_moves_to_keep = this.best_moves_to_keep;
+        ret.best_move_max_distance = this.best_move_max_distance;
+        ret.best_move_randomisation = this.best_move_randomisation;
+
+        ret.weights[0] = this.weights[0];
+        ret.weights[1] = this.weights[1];
+        ret.weights[2] = this.weights[2];
+        ret.weights[3] = this.weights[3];
+
+        ret.recursion_smoothing = this.recursion_smoothing;
+
+        return ret;
     }
 }

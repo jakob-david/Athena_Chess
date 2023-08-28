@@ -26,7 +26,6 @@ public class AI {
 
     public Move getMove(boolean reduced){
 
-
         // Make a list to hold to best x moves. (At most x moves)
         List<Move> best_moves = new ArrayList<>();
 
@@ -85,9 +84,11 @@ public class AI {
 
                     Collections.sort(best_moves);
 
+
                     if(ai_parameters.best_moves_to_keep < best_moves.size()){
                         best_moves.remove(best_moves.size()-1);
                     }
+
 
                 }
             }
@@ -263,10 +264,10 @@ public class AI {
 
         int ret = 0;
 
-        ret += ai_parameters.own_move_weight * own_move_value;
-        ret += ai_parameters.opp_move_weight * opp_move_value;
-        ret += ai_parameters.opp_piece_weight * opp_piece_value;
-        ret += ai_parameters.recursion_weight * recursion_value;
+        ret += ai_parameters.weights[0] * own_move_value;
+        ret += ai_parameters.weights[1] * opp_move_value;
+        ret += ai_parameters.weights[2] * opp_piece_value;
+        ret += ai_parameters.weights[3] * recursion_value;
 
         return ret;
     }
