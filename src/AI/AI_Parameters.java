@@ -56,6 +56,13 @@ public class AI_Parameters {
     public AI_Parameters(){
     }
 
+    public void setParametersToLearning(){
+        this.weights[0] = 1;
+        this.weights[1] = 1;
+        this.weights[2] = 1;
+        this.weights[3] = 1;
+    }
+
     public void setIsWhite(boolean is_white){
         this.is_white = is_white;
     }

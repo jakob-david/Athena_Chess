@@ -450,9 +450,9 @@ public class Game {
             for (Piece piece : pieces) {
 
                 if (null == piece) {
-                    System.out.print(" . ");
+                    System.out.print(". ");
                 } else {
-                    System.out.print((piece.isWhite?"w":"b") + piece.name + " ");
+                    System.out.print(/*(piece.isWhite?"w":"b")*/ piece.name + " ");
                 }
             }
             System.out.println();

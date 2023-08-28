@@ -127,111 +127,125 @@ public class Brett extends JFrame implements ActionListener{
 
 
 
+
     //
     // Action function
     // -----------------------------
 
     /*
-    * Handle Actions
+    * Handles action. Decides which state to perform.
     * */
     public void actionPerformed (ActionEvent ae){
 
         if(this.state == 0){
-
-            int i = 0;
-            for(JButton but: grid){
-                if(ae.getSource() == but){
-
-                    this.state_string = but.getText();
-                    this.state_id = i;
-                    break;
-                }
-                i++;
-            }
-
-            // check possible move is possible
-            int[] tmp = getGridID(i);
-            int id_i = tmp[0];
-            int id_j = tmp[1];
-
-            if(this.state_string.isEmpty() || !game.checkIfRightPlayer(id_i, id_j)){
-                return;
-            }
-
-            this.state_possibleMoves = game.getPossibleMoves(id_i, id_j, true);
-
-            this.state_possibleMoves.forEach((c) -> grid[c].setBackground(Color.PINK));
-
-            this.state = 1;
-
+            stateZeroAction(ae);
         } else if (this.state == 1) {
-
-
-            // this.state_possibleMoves.forEach((c) -> colourField(c));
-            this.state_possibleMoves.forEach(this::colourField);
-
-            int i = 0;
-            for(JButton but: grid){
-
-
-                if(ae.getSource() == but){
-
-                    boolean correct_move = state_possibleMoves.contains(i);
-
-                    if(this.state_id == i || !correct_move){
-                        this.state = 0;
-                        return;
-                    }
-                    else {
-                        but.setText(this.state_string);
-                        this.grid[state_id].setText("");
-
-                        int[] o = getGridID(state_id);
-                        int[] n = getGridID(i);
-                        game.makeMove(o[0], o[1], n[0], n[1], true);
-
-
-                        // Log Stuff
-                        // -------------------------------
-                        String tmp_string = "(" + (char)('A'+o[1]) + "," + (8-o[0]) + ") -> (" + (char)('A'+n[1]) + "," + (8-n[0]) + ")";
-                        log.addToLog(tmp_string);
-                        // -------------------------------
-                    }
-
-                    break;
-                }
-                i++;
-            }
-
-            // AI Stuff
-            // -------------------------------
-            if(AI_activated){
-                AI ai_player = new AI(game.getGameBoardReference(), ai_parameters);
-                Move move = ai_player.getMove(false);
-
-                game.makeMove(move.getFromI(), move.getFromJ(), move.getToI(), move.getToJ(), true);
-
-                int old_id = getGridID(move.getFromI(), move.getFromJ());
-                int new_id = getGridID(move.getToI(), move.getToJ());
-                this.grid[new_id].setText(this.grid[old_id].getText());
-                this.grid[old_id].setText("");
-
-            } else {
-                game.switchCurrentPlayer();
-            }
-            // -------------------------------
-
-            this.state = 0;
-
-            // Pawn transition
-            // -------------------------------
-            int[] tmp_pawn = game.checkForPawnTransformation(game.isWhite());
-            if(tmp_pawn[0] != -1){
-                putPieceOnBoard(tmp_pawn[0], tmp_pawn[1], 'Q', game.isWhite(), game.isWhite()?"WQ":"BQ");
-            }
-            // -------------------------------
-
+            stateOneAction(ae);
         }
+    }
+
+    /*
+     * Handles state 0 action.
+     * */
+    private void stateZeroAction(ActionEvent ae){
+
+        int i = 0;
+        for(JButton but: grid){
+            if(ae.getSource() == but){
+
+                this.state_string = but.getText();
+                this.state_id = i;
+                break;
+            }
+            i++;
+        }
+
+        // check possible move is possible
+        int[] tmp = getGridID(i);
+        int id_i = tmp[0];
+        int id_j = tmp[1];
+
+        if(this.state_string.isEmpty() || !game.checkIfRightPlayer(id_i, id_j)){
+            return;
+        }
+
+        this.state_possibleMoves = game.getPossibleMoves(id_i, id_j, true);
+
+        this.state_possibleMoves.forEach((c) -> grid[c].setBackground(Color.PINK));
+
+        this.state = 1;
+    }
+
+    /*
+     * Handles state 1 action.
+     * */
+    private void stateOneAction(ActionEvent ae){
+
+
+        // this.state_possibleMoves.forEach((c) -> colourField(c));
+        this.state_possibleMoves.forEach(this::colourField);
+
+        int i = 0;
+        for(JButton but: grid){
+
+
+            if(ae.getSource() == but){
+
+                boolean correct_move = state_possibleMoves.contains(i);
+
+                if(this.state_id == i || !correct_move){
+                    this.state = 0;
+                    return;
+                }
+                else {
+                    but.setText(this.state_string);
+                    this.grid[state_id].setText("");
+
+                    int[] o = getGridID(state_id);
+                    int[] n = getGridID(i);
+                    game.makeMove(o[0], o[1], n[0], n[1], true);
+
+
+                    // Log Stuff
+                    // -------------------------------
+                    String tmp_string = "(" + (char)('A'+o[1]) + "," + (8-o[0]) + ") -> (" + (char)('A'+n[1]) + "," + (8-n[0]) + ")";
+                    log.addToLog(tmp_string);
+                    // -------------------------------
+                }
+
+                break;
+            }
+            i++;
+        }
+
+        // AI Stuff
+        // -------------------------------
+        if(AI_activated){
+            AI ai_player = new AI(game.getGameBoardReference(), ai_parameters);
+            Move move = ai_player.getMove(false);
+
+            game.makeMove(move.getFromI(), move.getFromJ(), move.getToI(), move.getToJ(), true);
+
+            int old_id = getGridID(move.getFromI(), move.getFromJ());
+            int new_id = getGridID(move.getToI(), move.getToJ());
+            this.grid[new_id].setText(this.grid[old_id].getText());
+            this.grid[old_id].setText("");
+
+        } else {
+            game.switchCurrentPlayer();
+        }
+        // -------------------------------
+
+        this.state = 0;
+
+        // Pawn transition
+        // -------------------------------
+        int[] tmp_pawn = game.checkForPawnTransformation(game.isWhite());
+        if(tmp_pawn[0] != -1){
+            putPieceOnBoard(tmp_pawn[0], tmp_pawn[1], 'Q', game.isWhite(), game.isWhite()?"WQ":"BQ");
+        }
+        // -------------------------------
+
     }
 
 

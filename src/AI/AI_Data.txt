@@ -1,11 +1,11 @@
 Linear combination parameters
 -------------------------------
 own_move_weight: 
-2
-opp_move_weight: 
-2
-opp_piece_weight: 
 1
+opp_move_weight: 
+1
+opp_piece_weight: 
+3
 recursion_weight: 
 1
 -------------------------------

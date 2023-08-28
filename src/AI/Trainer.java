@@ -8,10 +8,15 @@ public class Trainer {
     public void train(){
 
         AI_Parameters best_parameters = new AI_Parameters(true, 0, false);
+        best_parameters.setParametersToLearning();
 
+        int training_rounds = 2;
+        for(int i=0; i<training_rounds; i++){
+            System.out.println("Round " + (i+1) + " of " + training_rounds);
+            System.out.println("-----------------------");
+            best_parameters = updateParameters(best_parameters, 5, 15);
+            System.out.println("-----------------------");
 
-        for(int i=0; i<2; i++){
-            best_parameters = updateParameters(best_parameters, 5, 20);
         }
 
         best_parameters.writeToFile();
@@ -20,10 +25,14 @@ public class Trainer {
 
     private AI_Parameters updateParameters(AI_Parameters parameters, int games, int rounds){
 
-        AI_Parameters best_parameters = parameters.Copy();
-        AI_Parameters new_parameters = best_parameters.Copy();
+        AI_Parameters new_best_parameters = parameters.Copy();
+
 
         for(int i=0; i<4; i++){
+
+            AI_Parameters best_parameters = parameters.Copy();
+            AI_Parameters new_parameters = parameters.Copy();
+
             best_parameters.weights[i] = 1;
             new_parameters.weights[i] = 2;
 
@@ -31,17 +40,18 @@ public class Trainer {
                 int score = makeSimulation(best_parameters, new_parameters, games, rounds);
 
                 if(score < -1){
-                    best_parameters = new_parameters.Copy();
+                    best_parameters.weights[i] = new_parameters.weights[i];
                     new_parameters.weights[i]++;
                     System.out.println("parameter " + (i+1) + "....updated");
                 } else {
-                    System.out.println("BEST VALUE FOUND: parameter" + (i+1));
+                    System.out.println("BEST VALUE FOUND: parameter " + (i+1));
+                    new_best_parameters.weights[i] = best_parameters.weights[i];
                     break;
                 }
             }
         }
 
-        return best_parameters;
+        return new_best_parameters;
     }
 
 
