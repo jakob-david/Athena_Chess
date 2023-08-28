@@ -24,6 +24,7 @@ The weights for the combination is derived by a training process.
 Each recursive step plays one move from the opponent and one move for one self. 
 Both chosen by an AI without recursion. 
 Moreover, the AI is reduced to only include the "piece value" (point 3).
+After that the move value gets evaluated and returned. Each recursion returns the value divided by 2 in order to get some smoothing. 
 
 ### Training 
 The training is very simple. First two AIs get initialised: 
