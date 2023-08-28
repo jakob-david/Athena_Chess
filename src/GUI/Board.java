@@ -62,6 +62,9 @@ public class Board extends JFrame implements ActionListener{
     }
 
 
+
+
+
     //
     // Init functions.
     // -----------------------------
@@ -136,6 +139,7 @@ public class Board extends JFrame implements ActionListener{
     private void initLog(){
         log.setVisible(true);
     }
+
 
 
 

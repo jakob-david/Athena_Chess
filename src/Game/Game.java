@@ -163,7 +163,7 @@ public class Game {
 
 
     //
-    // Larger Private Functions
+    // Functions to check whether in check.
     // -----------------------------
 
     /*
@@ -212,7 +212,9 @@ public class Game {
         return false;
     }
 
-
+    /*
+     * Gets the ID of the king.
+     * */
     private int getKingID(boolean is_white){
 
         for(int m = 0; m < 8; m++){
@@ -230,6 +232,8 @@ public class Game {
         System.err.println("Error: King not found");
         return -1;
     }
+
+
 
 
     //
@@ -305,6 +309,9 @@ public class Game {
         }
     }
 
+    /*
+     * Makes one move using a Move object.
+     * */
     public void makeMove(AI.Move move, boolean human_move){
 
         int old_i = move.getFromI();
@@ -438,7 +445,6 @@ public class Game {
     //
     // Small Helper Function
     // -----------------------------
-
 
     /*
      * Prints the Game Board to the console.

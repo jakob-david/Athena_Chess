@@ -26,17 +26,6 @@ public class Move implements Comparable<Move> {
         move[3] = to_j;
     }
 
-    public Move (int[] coordinates, Piece from_piece, Piece to_piece){
-
-        this.to_piece = to_piece;
-        this.from_piece = from_piece;
-
-        move[0] = coordinates[0];
-        move[1] = coordinates[1];
-        move[2] = coordinates[2];
-        move[3] = coordinates[3];
-    }
-
     public Move (int old_i, int old_j, int new_i, int new_j, Piece from_piece, Piece to_piece){
 
         this.to_piece = to_piece;
@@ -48,9 +37,13 @@ public class Move implements Comparable<Move> {
         move[3] = new_j;
     }
 
+    /*
+     * Constructor. Makes a dummy Move object if no move is possible.
+     * */
     public Move(boolean no_move_possible){
         this.no_move_possible = no_move_possible;
     }
+
 
 
     //
@@ -73,6 +66,10 @@ public class Move implements Comparable<Move> {
         return move[3];
     }
 
+
+    /*
+     * Gets copy of from_piece.
+     * */
     public Piece getFrom_pieceCopy(){
 
         if(this.from_piece != null){
@@ -83,6 +80,9 @@ public class Move implements Comparable<Move> {
 
     }
 
+    /*
+     * Gets a copy of to_piece.
+     * */
     public Piece getTo_pieceCopy(){
 
         if(this.to_piece != null){
@@ -98,6 +98,9 @@ public class Move implements Comparable<Move> {
     // Setter
     // -----------------------------
 
+    /*
+     * Setter: from_piece.
+     * */
     public void setFromPiece(Piece from_piece){
 
         if(null == from_piece){
@@ -107,6 +110,9 @@ public class Move implements Comparable<Move> {
         }
     }
 
+    /*
+     * Setter: to_piece.
+     * */
     public void setToPiece(Piece to_piece){
 
         if(null == to_piece){
@@ -116,10 +122,15 @@ public class Move implements Comparable<Move> {
         }
     }
 
+
+
     //
     // Compare
     // -----------------------------
 
+    /*
+     * Compares two move objects.
+     * */
     @Override
     public int compareTo(Move m) {
         return m.move_value - this.move_value;

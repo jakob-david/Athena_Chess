@@ -20,6 +20,9 @@ public class Log extends JFrame{
         label.setText(this.text);
     }
 
+    /*
+     * Adds a string to the log.
+     * */
     public void addToLog(String text, boolean is_white){
         this.text += "<br>" + (is_white?"white: ":"black: ") +  text + "</br>";
         label.setText("<html>" + this.text + "</html>");

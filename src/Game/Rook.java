@@ -11,6 +11,10 @@ public class Rook extends Piece {
         this.value = 5;
     }
 
+
+    /*
+     * Gets possible moves for a rook.
+     * */
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
@@ -18,6 +22,9 @@ public class Rook extends Piece {
     }
 
 
+    /*
+     * Makes a copy of rook.
+     * */
     @Override
     public Piece Copy() {
         return new Rook(this.isWhite);

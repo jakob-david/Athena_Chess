@@ -14,6 +14,10 @@ public class Pawn extends Piece {
         this.first_move = true;
     }
 
+
+    /*
+     * Gets possible moves for a pawn.
+     * */
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
@@ -50,6 +54,9 @@ public class Pawn extends Piece {
 
     }
 
+    /*
+     * Makes a copy of queen.
+     * */
     @Override
     public Piece Copy() {
         Pawn tmp_pawn = new Pawn(this.isWhite);
@@ -57,6 +64,9 @@ public class Pawn extends Piece {
         return tmp_pawn;
     }
 
+    /*
+     * Sets first move to false.
+     * */
     public void setFirstMove(){
         this.first_move = false;
     }

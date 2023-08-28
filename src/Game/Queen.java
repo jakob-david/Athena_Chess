@@ -11,6 +11,10 @@ public class Queen extends Piece {
         this.value = 9;
     }
 
+
+    /*
+     * Gets possible moves for a queen.
+     * */
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
@@ -22,6 +26,10 @@ public class Queen extends Piece {
         return ret;
     }
 
+
+    /*
+     * Makes copy of queen.
+     * */
     @Override
     public Piece Copy() {
         return new Queen(this.isWhite);

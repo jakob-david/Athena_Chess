@@ -38,6 +38,9 @@ public class AI_Parameters {
     // -------------------------------
 
 
+    //
+    // Constructor
+    // -----------------------------
     public AI_Parameters(boolean is_white, int moves_ahead, boolean best_move_randomisation){
         this.moves_ahead = moves_ahead;
         this.best_move_randomisation = best_move_randomisation;
@@ -54,6 +57,17 @@ public class AI_Parameters {
     public AI_Parameters(){
     }
 
+
+
+
+
+    //
+    // Small public functions.
+    // -----------------------------
+
+    /*
+     * Sets the parameters for the linear combination training.
+     * */
     public void setParametersToLearning(){
         this.weights[0] = 1;
         this.weights[1] = 1;
@@ -61,9 +75,19 @@ public class AI_Parameters {
         this.weights[3] = 1;
     }
 
+    /*
+     * Setter for is_white.
+     * */
     public void setIsWhite(boolean is_white){
         this.is_white = is_white;
     }
+
+
+
+
+    //
+    // File interaction.
+    // -----------------------------
 
     /*
      * Write training data to file.
@@ -112,7 +136,6 @@ public class AI_Parameters {
         }
     }
 
-
     /*
      * Creates a string of all parameters.
      * */
@@ -135,6 +158,15 @@ public class AI_Parameters {
         return ret_string;
     }
 
+
+
+    //
+    // Copy
+    // -----------------------------
+
+    /*
+     * Makes a copy of AI_parameters object.
+     * */
     public AI_Parameters Copy(){
         AI_Parameters ret = new AI_Parameters();
 

@@ -15,16 +15,21 @@ public abstract class Piece {
         this.isWhite = isWhite;
     }
 
+
+    //
+    // Abstract functions.
+    // -----------------------------
+
     /*
      * Gets all possible moves for a Piece.
      * */
     public abstract List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations);
 
-
     /*
      * Makes a copy of a Piece.
      * */
     public abstract Piece Copy();
+
 
 
 
@@ -118,6 +123,8 @@ public abstract class Piece {
     }
 
 
+
+
     //
     // Small Helper functions
     // -----------------------------
@@ -139,4 +146,5 @@ public abstract class Piece {
 
         return i >= 0 && i <= 7 && j >= 0 && j <= 7;
     }
+
 }

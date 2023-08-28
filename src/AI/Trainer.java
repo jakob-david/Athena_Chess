@@ -3,8 +3,9 @@ import Game.Game;
 
 public class Trainer {
 
-
-
+    /*
+     * Trains the four parameters for the linear combination.
+     * */
     public void train(){
 
         AI_Parameters best_parameters = new AI_Parameters(true, 0, false);
@@ -22,7 +23,9 @@ public class Trainer {
         best_parameters.writeToFile();
     }
 
-
+    /*
+     * Updates the four parameters for the linear combination.
+     * */
     private AI_Parameters updateParameters(AI_Parameters parameters, int games, int rounds){
 
         AI_Parameters new_best_parameters = parameters.Copy();
@@ -54,9 +57,9 @@ public class Trainer {
         return new_best_parameters;
     }
 
-
-
-
+    /*
+     * Makes a simulation for x games and y rounds.
+     * */
     private int makeSimulation(AI_Parameters best_parameters, AI_Parameters new_parameters, int games, int rounds){
 
         best_parameters.setIsWhite(true);
@@ -78,6 +81,10 @@ public class Trainer {
         return score;
     }
 
+    /*
+     * Plays one game for x rounds.
+     * Return: 1...first player wins, 2...second player wins, 3...draw.
+     * */
     private int playGame(AI_Parameters white_parameters, AI_Parameters black_parameters, int rounds){
 
         Game game = new Game(true);

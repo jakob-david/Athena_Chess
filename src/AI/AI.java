@@ -15,7 +15,9 @@ public class AI {
     private final AI_Parameters ai_parameters;
 
 
-    //boolean is_white, int moves_ahead, boolean best_move_randomisation
+    //
+    // Constructor.
+    // -----------------------------
     public AI(Piece[][] board, AI_Parameters ai_parameters){
 
         this.ai_parameters = ai_parameters;
@@ -24,6 +26,13 @@ public class AI {
 
 
 
+    //
+    // Main functions.
+    // -----------------------------
+
+    /*
+     * Gets a move from the AI.
+     * */
     public Move getMove(boolean reduced){
 
         // Make a list to hold to best x moves. (At most x moves)
@@ -109,7 +118,9 @@ public class AI {
         return best_moves.get(pick_move);
     }
 
-
+    /*
+     * Performs one recursive step.
+     * */
     private int recursionStep(int depth){
 
 
@@ -171,7 +182,6 @@ public class AI {
     //
     // Large Helper Function
     // -----------------------------
-
 
     /*
      * Returns the amount of possible moves for the current player.
@@ -243,13 +253,20 @@ public class AI {
     }
 
 
+
+
     //
     // Setter functions
     // -----------------------------
 
+    /*
+     * Sets the game-board.
+     * */
     public void setGameBoard(Piece[][] board){
         this.current_board = new Game(board, ai_parameters.is_white);
     }
+
+
 
 
 

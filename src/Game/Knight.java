@@ -11,6 +11,10 @@ public class Knight extends Piece {
         this.value = 3;
     }
 
+
+    /*
+     * Gets possible moves for a knight.
+     * */
     @Override
     public List<Integer> getPossibleMoves(int i, int j, boolean[][] locations, boolean[][] own_locations) {
 
@@ -28,6 +32,10 @@ public class Knight extends Piece {
         return ret;
     }
 
+
+    /*
+     * Makes a copy of knight.
+     * */
     @Override
     public Piece Copy() {
         return new Knight(this.isWhite);
