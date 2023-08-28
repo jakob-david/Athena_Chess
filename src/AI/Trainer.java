@@ -3,10 +3,22 @@ import Game.Game;
 
 public class Trainer {
 
+    int games;
+    int rounds;
+
+    public Trainer(int games, int rounds){
+        this.games = games;
+        this.rounds = rounds;
+    }
+
     /*
      * Trains the four parameters for the linear combination.
      * */
-    public void train(){
+    public void train(boolean train){
+
+        if (!train){
+            return;
+        }
 
         AI_Parameters best_parameters = new AI_Parameters(true, 0, false);
         best_parameters.setParametersToLearning();
@@ -15,7 +27,7 @@ public class Trainer {
         for(int i=0; i<training_rounds; i++){
             System.out.println("Round " + (i+1) + " of " + training_rounds);
             System.out.println("-----------------------");
-            best_parameters = updateParameters(best_parameters, 5, 15);
+            best_parameters = updateParameters(best_parameters, this.games, this.rounds);
             System.out.println("-----------------------");
 
         }
