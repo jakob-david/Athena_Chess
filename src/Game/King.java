@@ -9,8 +9,8 @@ public class King extends Piece {
 
         super('K', isWhite);
 
-        // maybe not the best idea. Should be infinite.
-        // "-2000" because when sum all values of one colour we would get an overflow.
+        // Maybe not the best idea. Should be infinite.
+        // "-2000" because when we sum all values of one color, we would get an overflow.
         // Imagine the Queen has the highest value (9) and one queen per square we have 8*62=576 Points
         // Which is less than 2000.
         this.value = Integer.MAX_VALUE - 2000;
