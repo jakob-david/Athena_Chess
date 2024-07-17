@@ -3,7 +3,7 @@
 It's a small chess game with an even smaller AI opponent programmed in a day. 
 
 <p align="center">
-    <img src="./pictures/chess_board.png" alt="Figure of the board" height="600"><br>
+    <img src="./pictures/chess_board.png" alt="Figure of the board" height="500"><br>
     <em>
     Figure 1: The board after it is set up, including the move preview of one pawn. 
     </em>
