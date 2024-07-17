@@ -3,7 +3,7 @@
 It's a small chess game with an even smaller AI opponent programmed in a day. 
 
 <p align="center">
-    <img src="./pictures/chess_board.png" alt="Figure of the board" height="500"><br>
+    <img src="./pictures/chess_board.png" alt="Figure of the board" height="600"><br>
     <em>
     Figure 1: The board after it is set up, including the move preview of one pawn. 
     </em>
@@ -15,7 +15,7 @@ The chess game can do all moves except:
 2. en passant
 3. pawn promotion to something other than a queen
 
-   It also has a move preview and a window tracking all moves. 
+It also has a move preview and a window tracking all moves. 
 
 ### Basic information about the AI. 
 The AI calculates four parameters to decide which move to take: 
