@@ -15,7 +15,7 @@ The chess game can do all moves except:
 2. en passant
 3. pawn promotion to something other than a queen
 
-It also has a move preview and a window tracking all moves. 
+It also has a built-in  preview of possible moves and a window that tracks all made moves. 
 
 ### Basic information about the AI. 
 The AI calculates four parameters to decide which move to take: 
