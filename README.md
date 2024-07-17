@@ -2,6 +2,12 @@
 
 It's a small chess game with an even smaller AI opponent programmed in a day. 
 
+<p align="center">
+    <img src="./pictures/chess_board.png" alt="Figure of the board"><br>
+    <em>
+    Figure 3: The system after the initialization (left) and the system after the simulation (right).
+    </em>
+</p>
 
 ### Basic information about the chess logic
 The chess game can do all moves except: 
