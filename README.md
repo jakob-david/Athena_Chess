@@ -3,7 +3,7 @@
 It's a small chess game with an even smaller AI opponent programmed in a day. 
 
 <p align="center">
-    <img src="./pictures/chess_board.png" alt="Figure of the board"><br>
+    <img src="./pictures/chess_board.png" alt="Figure of the board" height="300"><br>
     <em>
     Figure 3: The system after the initialization (left) and the system after the simulation (right).
     </em>
